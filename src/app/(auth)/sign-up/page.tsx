@@ -2,14 +2,89 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterSchema, registerValidation } from "@/lib/validations/auth";
+import { AuthAdapter, useAuthMutation } from "@/adapters/AuthAdapter";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const router = useRouter();
 
   const date = new Date();
+
+  // Form control for registration with password confirmation
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerValidation),
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+    },
+    mode: "onChange", // Validate on change for immediate feedback
+  });
+
+  const signUpMutation = useAuthMutation({
+    mutationCallback: AuthAdapter.signUp,
+
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Failed to create account. Please try again.";
+      setFormError(errorMessage);
+      toast.error(errorMessage);
+    },
+  });
+
+  const handleSignUp = async (data: RegisterSchema) => {
+    if (!agreedToTerms) {
+      setFormError("Please agree to the Terms of Service and Privacy Policy");
+      toast.error("Please agree to the Terms of Service and Privacy Policy");
+      return;
+    }
+
+    setFormError(null);
+    try {
+      // Strip out confirmPassword before sending to API
+      const { confirmPassword, ...signUpData } = data;
+      await signUpMutation.mutateAsync(signUpData);
+
+      setFormError(null);
+      toast.success(
+        "Account created successfully! Please verify your email address."
+      );
+      form.reset();
+
+      // Store email in localStorage or session to use in verification page
+      sessionStorage.setItem("verificationEmail", data.email);
+
+      router.push("/verify-email");
+    } catch (error) {
+      // Error is handled in onError callback
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f2f6ff] to-white flex flex-col justify-center items-center p-4 sm:p-6 md:p-8">
@@ -36,176 +111,194 @@ export default function SignUp() {
           </div>
 
           {/* Form */}
-          <form className="space-y-5">
-            {/* First Name and Last Name - side by side using flex */}
-            <div className="flex flex-col space-y-2">
-              <label className="block text-sm font-medium text-[#1e1e1e]">
-                Name
-              </label>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSignUp)}
+              className="space-y-5"
+            >
+              {formError && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                  {formError}
+                </div>
+              )}
+
+              {/* First Name and Last Name */}
               <div className="flex space-x-3">
-                <div className="flex-1">
-                  <input
-                    type="text"
-                    id="firstName"
-                    placeholder="First name"
-                    className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
-                  />
-                </div>
-                <div className="flex-1">
-                  <input
-                    type="text"
-                    id="lastName"
-                    placeholder="Last name"
-                    className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-[#1e1e1e]"
-              >
-                Email
-              </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Enter your email"
-                  className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-[#1e1e1e]"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  placeholder="Create a password"
-                  className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#959595] hover:text-[#1e1e1e] transition-colors"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-              <p className="text-xs text-[#959595]">
-                Password must be at least 8 characters long
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-[#1e1e1e]"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  placeholder="Confirm your password"
-                  className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#959595] hover:text-[#1e1e1e] transition-colors"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff size={20} />
-                  ) : (
-                    <Eye size={20} />
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="First name"
+                          {...field}
+                          className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs text-red-500 mt-1" />
+                    </FormItem>
                   )}
-                </button>
-              </div>
-            </div>
+                />
 
-            <div className="flex items-start">
-              <div className="flex items-center h-5">
-                <input
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Last name"
+                          {...field}
+                          className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs text-red-500 mt-1" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        {...field}
+                        className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs text-red-500 mt-1" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create a password"
+                          {...field}
+                          className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#959595] hover:text-[#1e1e1e] transition-colors"
+                          onClick={() => setShowPassword(!showPassword)}
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? (
+                            <EyeOff size={20} />
+                          ) : (
+                            <Eye size={20} />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormDescription className="text-xs text-[#959595]">
+                      Password must be at least 8 characters long with
+                      uppercase, lowercase, number, and special character
+                    </FormDescription>
+                    <FormMessage className="text-xs text-red-500 mt-1" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm your password"
+                          {...field}
+                          className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#959595] hover:text-[#1e1e1e] transition-colors"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          aria-label={
+                            showConfirmPassword
+                              ? "Hide password"
+                              : "Show password"
+                          }
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff size={20} />
+                          ) : (
+                            <Eye size={20} />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-xs text-red-500 mt-1" />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex items-start space-x-2">
+                <Checkbox
                   id="terms"
-                  type="checkbox"
+                  checked={agreedToTerms}
+                  onCheckedChange={(checked) =>
+                    setAgreedToTerms(checked as boolean)
+                  }
                   className="h-4 w-4 border-[#e4e4e4] rounded text-[#4285f4] focus:ring-[#4285f4]/20"
                 />
+                <div className="text-sm">
+                  <label htmlFor="terms" className="text-[#959595]">
+                    I agree to the{" "}
+                    <Link href="#" className="text-[#4285f4] hover:underline">
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="#" className="text-[#4285f4] hover:underline">
+                      Privacy Policy
+                    </Link>
+                  </label>
+                </div>
               </div>
-              <div className="ml-2 text-sm">
-                <label htmlFor="terms" className="text-[#959595]">
-                  I agree to the{" "}
-                  <Link href="#" className="text-[#4285f4] hover:underline">
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link href="#" className="text-[#4285f4] hover:underline">
-                    Privacy Policy
-                  </Link>
-                </label>
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  disabled={signUpMutation.isPending || !form.formState.isValid}
+                  className="w-full bg-[#1e1e1e] text-white py-3 rounded-lg hover:bg-black transition-colors font-medium shadow-sm hover:shadow"
+                >
+                  {signUpMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating Account...
+                    </>
+                  ) : (
+                    "Create Account"
+                  )}
+                </Button>
               </div>
-            </div>
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="w-full bg-[#1e1e1e] text-white py-3 rounded-lg hover:bg-black transition-colors font-medium shadow-sm hover:shadow"
-              >
-                Create Account
-              </button>
-            </div>
-
-            {/* <div className="relative flex items-center justify-center">
-              <div className="border-t border-[#e4e4e4] absolute w-full"></div>
-              <span className="bg-white px-4 text-sm text-[#959595] relative">
-                or sign up with
-              </span>
-            </div> */}
-            {/* 
-            <button
-              type="button"
-              className="w-full flex items-center justify-center gap-2 border border-[#e4e4e4] py-3 rounded-lg hover:bg-[#f8f9fa] transition-colors font-medium"
-            >
-              <svg
-                width="18"
-                height="18"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  fill="#4285F4"
-                  d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"
-                />
-              </svg>
-              Sign Up with Google
-            </button> */}
-          </form>
+            </form>
+          </Form>
 
           <p className="text-center mt-8 text-[#959595]">
             Already have an account?{" "}

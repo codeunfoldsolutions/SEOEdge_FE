@@ -1,18 +1,37 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { AuthAdapter, useAuthMutation } from "@/adapters/AuthAdapter";
+import { Button } from "@/components/ui/button";
 
 export default function VerifyEmail() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [formError, setFormError] = useState<string | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter();
 
   const date = new Date();
+
+  useEffect(() => {
+    // Retrieve email from session storage
+    const storedEmail = sessionStorage.getItem("verificationEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    } else {
+      // If no email is found, redirect to sign-up page
+      toast.error("No email found for verification. Please sign up again.");
+      router.push("/sign-up");
+    }
+  }, [router]);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -22,6 +41,43 @@ export default function VerifyEmail() {
       setCanResend(true);
     }
   }, [timeLeft]);
+
+  const verifyEmailMutation = useAuthMutation({
+    mutationCallback: AuthAdapter.verifyOTP,
+    onSuccess: () => {
+      setFormError(null);
+      toast.success("Email verified successfully!");
+      // Redirect to dashboard or login page after successful verification
+      router.push("/login");
+    },
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Failed to verify email. Please try again.";
+      setFormError(errorMessage);
+      toast.error(errorMessage);
+    },
+  });
+
+  const resendOTPMutation = useAuthMutation({
+    mutationCallback: AuthAdapter.resendOTP,
+    onSuccess: () => {
+      toast.success("A new verification code has been sent to your email.");
+      // Reset OTP fields
+      setOtp(["", "", "", "", "", ""]);
+      // Reset timer
+      setTimeLeft(60);
+      setCanResend(false);
+      // Focus first input
+      inputRefs.current[0]?.focus();
+    },
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Failed to resend verification code. Please try again.";
+      toast.error(errorMessage);
+    },
+  });
 
   const handleChange = (index: number, value: string) => {
     if (value.length <= 1) {
@@ -46,15 +102,44 @@ export default function VerifyEmail() {
     }
   };
 
-  const handleResend = () => {
-    if (canResend) {
-      // Reset OTP fields
-      setOtp(["", "", "", "", "", ""]);
-      // Reset timer
-      setTimeLeft(60);
-      setCanResend(false);
-      // Focus first input
-      inputRefs.current[0]?.focus();
+  const handleResend = async () => {
+    if (canResend && email) {
+      try {
+        await resendOTPMutation.mutateAsync({
+          email,
+        });
+      } catch (error) {
+        // Error handled in onError callback
+        console.log(error);
+      }
+    }
+  };
+
+  const handleVerify = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Check if OTP is complete
+    if (otp.some((digit) => digit === "")) {
+      setFormError("Please enter the complete verification code");
+      toast.error("Please enter the complete verification code");
+      return;
+    }
+
+    if (!email) {
+      setFormError("Email not found. Please sign up again.");
+      toast.error("Email not found. Please sign up again.");
+      return;
+    }
+
+    setFormError(null);
+    try {
+      await verifyEmailMutation.mutateAsync({
+        email,
+        otp: otp.join(""),
+      });
+    } catch (error) {
+      // Error handled in onError callback
+      console.log(error);
     }
   };
 
@@ -78,25 +163,34 @@ export default function VerifyEmail() {
               Verify Your Email
             </h1>
             <p className="text-[#959595] max-w-sm mx-auto">
-              We&apos;ve sent a verification code to your email. Please enter
-              the code below to verify your account.
+              We&apos;ve sent a verification code to{" "}
+              <span className="font-medium text-[#1e1e1e]">{email}</span>.
+              Please enter the code below to verify your account.
             </p>
           </div>
 
           {/* OTP Input */}
-          <form className="space-y-6">
+          <form onSubmit={handleVerify} className="space-y-6">
+            {formError && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                {formError}
+              </div>
+            )}
+
             <div className="flex justify-center gap-2">
               {otp.map((digit, index) => (
                 <input
                   key={index}
-                  //@ts-expect-error expect type error
                   ref={(el) => (inputRefs.current[index] = el)}
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   maxLength={1}
                   value={digit}
+                  disabled={verifyEmailMutation.isPending}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className="w-12 h-14 text-center text-xl font-bold border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                  className="w-12 h-14 text-center text-xl font-bold border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                 />
               ))}
             </div>
@@ -107,9 +201,17 @@ export default function VerifyEmail() {
                   <button
                     type="button"
                     onClick={handleResend}
-                    className="text-[#4285f4] font-medium hover:underline"
+                    disabled={resendOTPMutation.isPending}
+                    className="text-[#4285f4] font-medium hover:underline disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    Resend Code
+                    {resendOTPMutation.isPending ? (
+                      <>
+                        <Loader2 className="inline mr-2 h-3 w-3 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      "Resend Code"
+                    )}
                   </button>
                 ) : (
                   <>
@@ -122,12 +224,23 @@ export default function VerifyEmail() {
               </p>
             </div>
 
-            <button
+            <Button
               type="submit"
+              disabled={
+                verifyEmailMutation.isPending ||
+                otp.some((digit) => digit === "")
+              }
               className="w-full bg-[#1e1e1e] text-white py-3 rounded-lg hover:bg-black transition-colors font-medium shadow-sm hover:shadow"
             >
-              Verify Email
-            </button>
+              {verifyEmailMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                "Verify Email"
+              )}
+            </Button>
           </form>
 
           <p className="text-center mt-8 text-[#959595]">
