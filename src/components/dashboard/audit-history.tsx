@@ -1,18 +1,32 @@
-"use client"
+"use client";
 
-import { Calendar, History, Download, Send, ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import {
+  Calendar,
+  History,
+  Download,
+  Send,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface AuditHistoryProps {
   audits: Array<{
-    date: string
-    score: number
-    issues: number
-    change: string
-  }>
+    date: string;
+    score: number;
+    issues: number;
+    change: string;
+  }>;
 }
 
 export function AuditHistory({ audits }: AuditHistoryProps) {
@@ -38,23 +52,31 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-12">#</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Score</TableHead>
-            <TableHead>Issues</TableHead>
-            <TableHead>Change</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="w-12 hover:bg-primary-blue/10">#</TableHead>
+            <TableHead className="hover:bg-primary-blue/10">Date</TableHead>
+            <TableHead className="hover:bg-primary-blue/10">Score</TableHead>
+            <TableHead className="hover:bg-primary-blue/10">Issues</TableHead>
+            <TableHead className="hover:bg-primary-blue/10">Change</TableHead>
+            <TableHead className="text-right hover:bg-primary-blue/10">
+              Actions
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {audits.map((audit, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} className="hover:bg-primary-blue/10">
               <TableCell>{index + 1}</TableCell>
               <TableCell>{audit.date}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <span
-                    className={audit.score >= 80 ? "text-success" : audit.score >= 60 ? "text-warning" : "text-danger"}
+                    className={
+                      audit.score >= 80
+                        ? "text-success"
+                        : audit.score >= 60
+                        ? "text-warning"
+                        : "text-danger"
+                    }
                   >
                     {audit.score}/100
                   </span>
@@ -62,13 +84,20 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
                     value={audit.score}
                     className="h-1.5 w-16"
                     indicatorClassName={
-                      audit.score >= 80 ? "bg-success" : audit.score >= 60 ? "bg-warning" : "bg-danger"
+                      audit.score >= 80
+                        ? "bg-success"
+                        : audit.score >= 60
+                        ? "bg-warning"
+                        : "bg-danger"
                     }
                   />
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant="outline" className="bg-danger/10 text-danger border-danger/10">
+                <Badge
+                  variant="outline"
+                  className="bg-danger/10 text-danger border-danger/10"
+                >
                   {audit.issues} issues
                 </Badge>
               </TableCell>
@@ -78,8 +107,8 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
                     Number.parseInt(audit.change) > 0
                       ? "bg-success/20 text-success"
                       : Number.parseInt(audit.change) < 0
-                        ? "bg-danger/20 text-danger"
-                        : "bg-gray/20 text-gray"
+                      ? "bg-danger/20 text-danger"
+                      : "bg-gray/20 text-gray"
                   }`}
                 >
                   {audit.change}
@@ -125,6 +154,5 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

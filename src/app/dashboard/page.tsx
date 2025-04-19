@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { act, useState } from "react";
 import { Tag, Zap, LinkIcon, ImageIcon, FileText } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -118,7 +118,7 @@ export default function Dashboard() {
 
           {/* Tabs for Active Project */}
           <Tabs defaultValue="overview" className="mb-8">
-            <TabsList className="mb-4">
+            <TabsList className="mb-4 bg-primary-blue/10">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="issues">Issues</TabsTrigger>
               <TabsTrigger value="performance">Performance</TabsTrigger>

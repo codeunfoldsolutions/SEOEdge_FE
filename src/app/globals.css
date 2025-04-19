@@ -18,11 +18,15 @@
   --color-light-purple: "#CBC7F0";
   --color-primary-green: "#80B036";
   --color-dark-web-card-fill: "#141414";
-  --color-light-web-card-fill: : "#FEFEFE";
+  --color-light-web-card-fill: "#FEFEFE";
   --color-light-bg: "#FFFCFB";
   --color-light-input-fill: "#F9F7F7";
   --color-disabled-text: "#BEB5B3";
   --colot-sec-text: "#696260";
+
+  --color-primary-blue: #05a4e9;
+  --color-secondry-blue: #026894;
+  --color-primary-white: #fafafa;
 }
 
 :root {
@@ -142,4 +146,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.visual {
+  border: 2px solid red;
 }

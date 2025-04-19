@@ -107,8 +107,8 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
                 href={item.href}
                 className={`flex items-center gap-3 p-2 rounded-md ${
                   lastSegment.includes(item.name)
-                    ? "bg-primary/10 text-primary"
-                    : "text-foreground hover:bg-muted"
+                    ? "bg-primary-blue text-primary-white"
+                    : "text-foreground hover:bg-primary-blue/10"
                 }`}
               >
                 <item.icon size={18} />
@@ -122,26 +122,26 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
           <p className="text-xs text-gray uppercase font-medium mb-3">
             SUBSCRIPTION
           </p>
-          <div className="bg-primary/5 rounded-md p-3 mb-3">
+          <div className="bg-primary-blue text-primary-white rounded-md p-3 mb-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium">{subscription.plan}</span>
               <Badge
                 variant="outline"
-                className="bg-primary/10 text-primary border-primary/10 text-xs"
+                className="bg-secondry-blue  border-primary/10 text-xs text-primary-white"
               >
                 Active
               </Badge>
             </div>
-            <div className="space-y-1 text-xs text-gray">
+            <div className="space-y-1 text-xs">
               <div className="flex items-center justify-between">
                 <span>Audits Remaining:</span>
-                <span className="font-medium text-foreground">
+                <span className="font-medium">
                   {subscription.auditsRemaining}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Next Billing:</span>
-                <span className="font-medium text-foreground">
+                <span className="font-medium">
                   {subscription.nextBillingDate}
                 </span>
               </div>
