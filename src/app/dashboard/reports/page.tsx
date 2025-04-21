@@ -46,7 +46,6 @@ import { PageSpeedChart } from "../../../components/seo-charts/page-speed-chart"
 import { MobileFriendlinessChart } from "../../../components/seo-charts/mobile-friendliness-chart";
 import { BacklinksChart } from "../../../components/seo-charts/backlinks-chart";
 import { DashboardHeader } from "@/components/dashboard/header";
-// import { ExportPdfButton } from "../../../components/seo-charts/export-pdf-button"
 
 export default function SeoReport() {
   const [activeProject, setActiveProject] = useState("https://example.com");
