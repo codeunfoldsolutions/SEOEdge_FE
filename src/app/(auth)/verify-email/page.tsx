@@ -50,10 +50,10 @@ export default function VerifyEmail() {
       // Redirect to dashboard or login page after successful verification
       router.push("/login");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       const errorMessage =
-        error?.response?.data?.message ||
-        "Failed to verify email. Please try again.";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Failed to verify email. Please try again.";
       setFormError(errorMessage);
       toast.error(errorMessage);
     },
@@ -71,10 +71,11 @@ export default function VerifyEmail() {
       // Focus first input
       inputRefs.current[0]?.focus();
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       const errorMessage =
-        error?.response?.data?.message ||
-        "Failed to resend verification code. Please try again.";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Failed to verify email. Please try again.";
+      setFormError(errorMessage);
       toast.error(errorMessage);
     },
   });
@@ -181,7 +182,9 @@ export default function VerifyEmail() {
               {otp.map((digit, index) => (
                 <input
                   key={index}
-                  ref={(el) => (inputRefs.current[index] = el)}
+                  ref={(el) => {
+                    inputRefs.current[index] = el;
+                  }}
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"

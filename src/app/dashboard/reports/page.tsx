@@ -173,7 +173,9 @@ export default function SeoReport() {
 
         <Tabs defaultValue="issues">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="issues">Issues & Recommendations</TabsTrigger>
+            <TabsTrigger value="issues">
+              Issues &amp; Recommendations
+            </TabsTrigger>
             <TabsTrigger value="detailed">Detailed Analysis</TabsTrigger>
             <TabsTrigger value="benchmarks">Industry Benchmarks</TabsTrigger>
           </TabsList>
@@ -338,7 +340,7 @@ export default function SeoReport() {
                       <li>Add Product schema to product pages</li>
                       <li>Implement Article schema for blog posts</li>
                       <li>Add Organization schema to homepage</li>
-                      <li>Validate schema using Google's testing tool</li>
+                      <li>{`Validate schema using Google's testing tool`}</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -592,8 +594,8 @@ export default function SeoReport() {
                               </span>
                             </div>
                             <p className="text-xs text-muted-foreground ml-6 mt-1">
-                              Several key pages don't include target keywords in
-                              their heading structure.
+                              {` Several key pages don't include target keywords in
+                              their heading structure.`}
                             </p>
                           </div>
                           <div>
@@ -626,8 +628,8 @@ export default function SeoReport() {
                               </span>
                             </div>
                             <p className="text-xs text-muted-foreground ml-6 mt-1">
-                              Ensure each page has exactly one H1 tag that
-                              clearly describes the page's main topic.
+                              {`  Ensure each page has exactly one H1 tag that
+                              clearly describes the page's main topic.`}
                             </p>
                           </div>
                           <div>
@@ -690,8 +692,8 @@ export default function SeoReport() {
                                 <div>
                                   <p className="text-sm">Our Services</p>
                                   <p className="text-xs text-muted-foreground">
-                                    Issue: Missing target keyword "digital
-                                    marketing"
+                                    {`  Issue: Missing target keyword "digital
+                                    marketing"`}
                                   </p>
                                 </div>
                               </div>
@@ -929,8 +931,8 @@ export default function SeoReport() {
                                   </code>
                                 </div>
                                 <p className="text-xs text-muted-foreground ml-6 mt-1">
-                                  Recommendation: Shorten to
-                                  "website-conversion-strategies-2025"
+                                  {` Recommendation: Shorten to
+                                  "website-conversion-strategies-2025"`}
                                 </p>
                               </li>
                             </ul>
@@ -998,8 +1000,8 @@ export default function SeoReport() {
                               </span>
                             </div>
                             <p className="text-xs text-muted-foreground ml-6 mt-1">
-                              Several images have generic alt text like "image"
-                              or "photo" that doesn't describe the content.
+                              {`    Several images have generic alt text like "image"
+                              or "photo" that doesn't describe the content.`}
                             </p>
                           </div>
                           <div>
@@ -1125,7 +1127,7 @@ export default function SeoReport() {
                               </div>
                               <div className="text-xs text-muted-foreground">
                                 <span className="font-medium">Alt tag:</span>{" "}
-                                "image"
+                                {`"image"`}
                               </div>
                               <div className="text-xs text-muted-foreground">
                                 <span className="font-medium">Issues:</span>{" "}
@@ -1151,8 +1153,8 @@ export default function SeoReport() {
                               </div>
                               <div className="text-xs text-muted-foreground">
                                 <span className="font-medium">Alt tag:</span>{" "}
-                                "Premium wireless headphones with noise
-                                cancellation"
+                                {`"Premium wireless headphones with noise
+                                cancellation"`}
                               </div>
                               <div className="text-xs text-muted-foreground">
                                 <span className="font-medium">Issues:</span>{" "}
@@ -1415,8 +1417,8 @@ export default function SeoReport() {
                                 Missing Browser Caching
                               </h4>
                               <p className="text-xs text-muted-foreground mt-1">
-                                Static assets don't have proper cache headers,
-                                causing unnecessary reloads.
+                                {` Static assets don't have proper cache headers,
+                                causing unnecessary reloads.`}
                               </p>
                               <div className="mt-2 text-xs">
                                 <span className="font-medium">Impact:</span>{" "}
@@ -1799,8 +1801,8 @@ export default function SeoReport() {
                               </span>
                             </div>
                             <p className="text-xs text-muted-foreground ml-6 mt-1">
-                              Several key pages have thin content (under 500
-                              words) that doesn't fully address user intent.
+                              {` Several key pages have thin content (under 500
+                              words) that doesn't fully address user intent.`}
                             </p>
                           </div>
                           <div>
@@ -2097,9 +2099,9 @@ export default function SeoReport() {
                               </h4>
                             </div>
                             <p className="text-xs text-muted-foreground ml-8 mt-1">
-                              Use Google's Structured Data Testing Tool to
+                              {`Use Google's Structured Data Testing Tool to
                               validate all schema implementations and fix any
-                              errors.
+                              errors.`}
                             </p>
                           </div>
                         </CardContent>
@@ -2116,37 +2118,7 @@ export default function SeoReport() {
                             Product Schema Example
                           </CardTitle>
                         </CardHeader>
-                        <CardContent>
-                          <div className="bg-muted p-4 rounded-md overflow-x-auto">
-                            <pre className="text-xs">
-                              {`<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "Premium Wireless Headphones",
-  "image": "https://example.com/images/headphones.jpg",
-  "description": "High-quality wireless headphones with noise cancellation",
-  "brand": {
-    "@type": "Brand",
-    "name": "ExampleBrand"
-  },
-  "offers": {
-    "@type": "Offer",
-    "url": "https://example.com/products/headphones",
-    "priceCurrency": "USD",
-    "price": "149.99",
-    "availability": "https://schema.org/InStock"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "89"
-  }
-}
-</script>`}
-                            </pre>
-                          </div>
-                        </CardContent>
+                        <CardContent></CardContent>
                       </Card>
                     </div>
                   </div>
@@ -2324,11 +2296,11 @@ export default function SeoReport() {
                       <Card>
                         <CardContent className="p-4">
                           <p className="text-sm">
-                            Website security is an important factor for both
+                            {`Website security is an important factor for both
                             user trust and search engine rankings. Google has
                             confirmed that HTTPS is a ranking signal, and
                             security issues can negatively impact your site's
-                            visibility.
+                            visibility.`}
                           </p>
                           <div className="mt-4 space-y-2">
                             <div className="flex items-start gap-3">
@@ -2390,8 +2362,8 @@ export default function SeoReport() {
               <div>
                 <h2 className="text-2xl font-bold mb-4">Industry Benchmarks</h2>
                 <p className="text-muted-foreground">
-                  Compare your website's performance against industry averages
-                  and top competitors to identify areas for improvement.
+                  {`Compare your website's performance against industry averages
+                  and top competitors to identify areas for improvement.`}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -2643,7 +2615,7 @@ export default function SeoReport() {
                   <CardHeader>
                     <CardTitle>Top Keyword Opportunities</CardTitle>
                     <CardDescription>
-                      Keywords your competitors rank for that you don't
+                      {`Keywords your competitors rank for that you don't`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-0">
@@ -2671,7 +2643,7 @@ export default function SeoReport() {
                         <tbody>
                           <tr className="border-b">
                             <td className="p-4 text-sm">
-                              "digital marketing strategy template"
+                              {"digital marketing strategy template"}
                             </td>
                             <td className="p-4 text-sm">5,400</td>
                             <td className="p-4 text-sm">Medium</td>
@@ -2682,7 +2654,7 @@ export default function SeoReport() {
                           </tr>
                           <tr className="border-b">
                             <td className="p-4 text-sm">
-                              "small business SEO guide"
+                              {"small business SEO guide"}
                             </td>
                             <td className="p-4 text-sm">3,200</td>
                             <td className="p-4 text-sm">Medium</td>
@@ -2693,7 +2665,7 @@ export default function SeoReport() {
                           </tr>
                           <tr className="border-b">
                             <td className="p-4 text-sm">
-                              "website conversion optimization"
+                              {"website conversion optimization"}
                             </td>
                             <td className="p-4 text-sm">2,900</td>
                             <td className="p-4 text-sm">High</td>
@@ -2704,7 +2676,7 @@ export default function SeoReport() {
                           </tr>
                           <tr className="border-b">
                             <td className="p-4 text-sm">
-                              "local SEO checklist 2025"
+                              {"local SEO checklist 2025"}
                             </td>
                             <td className="p-4 text-sm">1,800</td>
                             <td className="p-4 text-sm">Low</td>
@@ -2715,7 +2687,7 @@ export default function SeoReport() {
                           </tr>
                           <tr>
                             <td className="p-4 text-sm">
-                              "B2B content marketing examples"
+                              {"B2B content marketing examples"}
                             </td>
                             <td className="p-4 text-sm">1,500</td>
                             <td className="p-4 text-sm">Medium</td>

@@ -48,10 +48,11 @@ export default function SignUp() {
   const signUpMutation = useAuthMutation({
     mutationCallback: AuthAdapter.signUp,
 
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       const errorMessage =
-        error?.response?.data?.message ||
-        "Failed to create account. Please try again.";
+        error instanceof Error
+          ? error.message
+          : "Failed to create account. Please try again.";
       setFormError(errorMessage);
       toast.error(errorMessage);
     },

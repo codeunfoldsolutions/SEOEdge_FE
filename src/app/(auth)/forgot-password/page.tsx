@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   ForgotPasswordSchema,
   ResetPasswordSchema,
@@ -90,9 +90,9 @@ export default function ResetPassword() {
         "Password reset link has been sent to your email. Please check your inbox."
       );
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError) => {
       const errorMessage =
-        error?.response?.data?.message ||
+        (error.response?.data as { message?: string })?.message ||
         "Failed to send reset link. Please try again.";
       setFormError(errorMessage);
       toast.error(errorMessage);
@@ -144,14 +144,14 @@ export default function ResetPassword() {
 
       // Redirect to login page after successful password reset
       router.push("/login");
-    } catch (error: any) {
-      // Handle error
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
       const errorMessage =
-        error?.response?.data?.message ||
+        axiosError.response?.data?.message ||
         "Failed to reset password. Please try again or request a new reset link.";
       setFormError(errorMessage);
       toast.error(errorMessage);
-      console.log(error);
+      console.error(axiosError);
     } finally {
       setIsResetting(false);
     }

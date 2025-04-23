@@ -50,6 +50,7 @@ export default function SignIn() {
   // Login mutation
   const loginMutation = useAuthMutation({
     mutationCallback: AuthAdapter.signIn,
+
     onSuccess: (data) => {
       setFormError(null);
       toast.success("Logged in successfully!");
@@ -64,10 +65,10 @@ export default function SignIn() {
       // Redirect to dashboard or home page
       router.push("/dashboard");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       const errorMessage =
-        error?.response?.data?.message ||
-        "Invalid email or password. Please try again.";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Failed to verify email. Please try again.";
       setFormError(errorMessage);
       toast.error(errorMessage);
     },
