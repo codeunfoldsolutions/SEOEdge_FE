@@ -84,11 +84,12 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
     <div className="w-[190px] border-r border-border flex flex-col bg-sidebar-background">
       <div className="p-4 border-b border-border">
         <Link href="/dashboard">
-          <div className="flex justify-center">
+          <div className="grid place-items-center">
             <Image
               src={"/seoedge logo.png"}
-              width={140}
+              width={180}
               height={40}
+              style={{ height: "auto" }}
               alt="Logo"
             />
           </div>

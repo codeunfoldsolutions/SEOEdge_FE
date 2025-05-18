@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Filter, SearchIcon, Calendar } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Filter, SearchIcon, Calendar } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,18 +11,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface AuditsFilterBarProps {
-  statusFilter: string
-  onStatusChange: (status: string) => void
-  projectFilter: string
-  onProjectChange: (project: string) => void
-  searchQuery: string
-  onSearchChange: (query: string) => void
-  projects: Array<{ name: string }>
+  statusFilter: string;
+  onStatusChange: (status: string) => void;
+  projectFilter: string;
+  onProjectChange: (project: string) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  projects: Array<{ url: string }>;
 }
 
 export function AuditsFilterBar({
@@ -49,7 +55,11 @@ export function AuditsFilterBar({
       </div>
 
       <div className="flex items-center gap-2 w-full sm:w-auto">
-        <Tabs defaultValue={statusFilter} onValueChange={onStatusChange} className="w-full sm:w-auto">
+        <Tabs
+          defaultValue={statusFilter}
+          onValueChange={onStatusChange}
+          className="w-full sm:w-auto"
+        >
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
@@ -64,8 +74,8 @@ export function AuditsFilterBar({
           <SelectContent>
             <SelectItem value="all">All Projects</SelectItem>
             {projects.map((project) => (
-              <SelectItem key={project.name} value={project.name}>
-                {project.name}
+              <SelectItem key={project.url} value={project.url}>
+                {project.url}
               </SelectItem>
             ))}
           </SelectContent>
@@ -100,6 +110,5 @@ export function AuditsFilterBar({
         </Button>
       </div>
     </div>
-  )
+  );
 }
-

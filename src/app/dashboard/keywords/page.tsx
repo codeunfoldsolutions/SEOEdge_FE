@@ -1,26 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { DashboardHeader } from "@/components/dashboard/header"
-import { KeywordsTable } from "@/components/keywords/keywords-table"
-import { KeywordsFilterBar } from "@/components/keywords/keywords-filter-bar"
-import { KeywordsSummary } from "@/components/keywords/keywords-summary"
-import { KeywordsChart } from "@/components/keywords/keywords-chart"
-import { Button } from "@/components/ui/button"
-import { Plus, Upload } from "lucide-react"
+import { useState } from "react";
+import { DashboardHeader } from "@/components/dashboard/header";
+import { KeywordsTable } from "@/components/keywords/keywords-table";
+import { KeywordsFilterBar } from "@/components/keywords/keywords-filter-bar";
+import { KeywordsSummary } from "@/components/keywords/keywords-summary";
+import { KeywordsChart } from "@/components/keywords/keywords-chart";
+import { Button } from "@/components/ui/button";
+import { Plus, Upload } from "lucide-react";
 
 export default function KeywordsPage() {
-  const [activeProject, setActiveProject] = useState("example.com")
-  const [groupFilter, setGroupFilter] = useState("all")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [searchQuery, setSearchQuery] = useState("")
-
-  // Sample projects
-  const projects = [
-    { name: "example.com", lastAudit: "2 hours ago", score: 78 },
-    { name: "myshop.com", lastAudit: "1 day ago", score: 65 },
-    { name: "blog.example.com", lastAudit: "3 days ago", score: 92 },
-  ]
+  const [groupFilter, setGroupFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Sample keywords data
   const keywords = [
@@ -154,27 +146,35 @@ export default function KeywordsPage() {
       group: "opportunities",
       trend: [null, null, null, null, null, null],
     },
-  ]
+  ];
 
   // Filter keywords based on group, status, and search query
   const filteredKeywords = keywords.filter((keyword) => {
-    const matchesGroup = groupFilter === "all" || keyword.group === groupFilter
-    const matchesStatus = statusFilter === "all" || keyword.status === statusFilter
-    const matchesSearch = keyword.keyword.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesGroup && matchesStatus && matchesSearch
-  })
+    const matchesGroup = groupFilter === "all" || keyword.group === groupFilter;
+    const matchesStatus =
+      statusFilter === "all" || keyword.status === statusFilter;
+    const matchesSearch = keyword.keyword
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesGroup && matchesStatus && matchesSearch;
+  });
 
   // Calculate summary statistics
-  const totalKeywords = keywords.length
-  const rankingKeywords = keywords.filter((k) => k.position !== null).length
-  const top10Keywords = keywords.filter((k) => k.position !== null && k.position <= 10).length
+  const totalKeywords = keywords.length;
+  const rankingKeywords = keywords.filter((k) => k.position !== null).length;
+  const top10Keywords = keywords.filter(
+    (k) => k.position !== null && k.position <= 10
+  ).length;
   const improvedKeywords = keywords.filter(
-    (k) => k.position !== null && k.previousPosition !== null && k.position < k.previousPosition,
-  ).length
+    (k) =>
+      k.position !== null &&
+      k.previousPosition !== null &&
+      k.position < k.previousPosition
+  ).length;
 
   return (
     <>
-      <DashboardHeader activeProject={activeProject} projects={projects} onProjectChange={setActiveProject} />
+      <DashboardHeader />
 
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-7xl mx-auto">
@@ -182,7 +182,9 @@ export default function KeywordsPage() {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h1 className="text-2xl font-bold mb-1">Keywords</h1>
-              <p className="text-gray">Track your keyword rankings and discover opportunities</p>
+              <p className="text-gray">
+                Track your keyword rankings and discover opportunities
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" className="gap-1">
@@ -205,7 +207,11 @@ export default function KeywordsPage() {
           />
 
           {/* Keywords chart */}
-          <KeywordsChart keywords={keywords.filter((k) => k.position !== null && k.group === "main")} />
+          <KeywordsChart
+            keywords={keywords.filter(
+              (k) => k.position !== null && k.group === "main"
+            )}
+          />
 
           {/* Filters */}
           <KeywordsFilterBar
@@ -223,6 +229,5 @@ export default function KeywordsPage() {
         </div>
       </main>
     </>
-  )
+  );
 }
-

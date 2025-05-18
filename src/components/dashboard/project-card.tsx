@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 
 interface ProjectCardProps {
   project: {
-    name: string;
-    lastAudit: string;
+    url: string;
+    updatedAt: string;
     score: number;
   };
   isActive: boolean;
@@ -30,9 +30,9 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
     >
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <div>
-          <h3 className="text-base font-medium">{project.name}</h3>
+          <h3 className="text-base font-medium">{project.url}</h3>
           <p className="text-xs text-gray flex items-center mt-1">
-            <Clock size={12} className="mr-1" /> Last audit: {project.lastAudit}
+            <Clock size={12} className="mr-1" /> Last audit: {project.updatedAt}
           </p>
         </div>
         <div

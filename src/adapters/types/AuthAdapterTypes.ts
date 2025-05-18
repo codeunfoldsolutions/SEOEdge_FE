@@ -26,3 +26,16 @@ export type PasswordRecoveryPayload = {
 export type ResetPasswordPayload = {
   password: string;
 };
+
+export type LoginResponse = {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+  session: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};

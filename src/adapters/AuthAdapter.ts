@@ -8,6 +8,7 @@ import {
   ResetPasswordPayload,
   VerifyEmailPayload,
   PasswordRecoveryPayload,
+  LoginResponse,
 } from "./types/AuthAdapterTypes";
 
 // api service initilizer
@@ -63,7 +64,7 @@ const AuthAdapter = {
   },
 
   signIn: async ({ payload }: MutationCallBackArgs<LoginPayload>) => {
-    const response = await authService.mutate<LoginPayload, unknown>({
+    const response = await authService.mutate<LoginPayload, LoginResponse>({
       slug: `login`,
       payload,
       type: "JSON",

@@ -6,12 +6,12 @@ export type MutationCallBack<R> = (
   token: string
 ) => Promise<AxiosResponse | undefined>;
 
-export type QueryCallBack<B> = (slug: string | undefined) => Promise<B>;
-
 export type MutationCallBackArgs<TPayload> = {
   payload: TPayload;
   params?: string;
 };
+
+export type QueryCallBack<B> = (slug: string | undefined) => Promise<B>;
 
 export type QueryCallBackArgs<TResponse> = {
   slug?: string;

@@ -10,7 +10,6 @@ import { ProfileSettings } from "@/components/settings/profile-settings";
 // import { ApiSettings } from "@/components/settings/api-settings"
 
 export default function SettingsPage() {
-  const [activeProject, setActiveProject] = useState("example.com");
   const [activeTab, setActiveTab] = useState("profile");
 
   // Sample projects
@@ -129,11 +128,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <DashboardHeader
-        activeProject={activeProject}
-        projects={projects}
-        onProjectChange={setActiveProject}
-      />
+      <DashboardHeader />
 
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-5xl mx-auto">

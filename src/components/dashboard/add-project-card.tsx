@@ -10,7 +10,7 @@ export function AddProjectCard() {
       <p className="text-xs text-gray text-center mb-3">
         Track SEO performance for another website
       </p>
-      <AddProjectModal showIcon={false} text="Add Website" />
+      <AddProjectModal />
     </Card>
   );
 }

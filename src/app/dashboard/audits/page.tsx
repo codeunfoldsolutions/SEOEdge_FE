@@ -9,19 +9,13 @@ import { ScheduleAuditModal } from "@/components/modals/schedule-audit-modal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
+import UseGetProjects from "@/adapters/apis/useGetProjects";
+
 export default function AuditsPage() {
-  const [activeProject, setActiveProject] = useState("example.com");
   const [statusFilter, setStatusFilter] = useState("all");
   const [projectFilter, setProjectFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Sample projects
-  const projects = [
-    { name: "example.com", lastAudit: "2 hours ago", score: 78 },
-    { name: "myshop.com", lastAudit: "1 day ago", score: 65 },
-    { name: "blog.example.com", lastAudit: "3 days ago", score: 92 },
-  ];
-
+  const { projects } = UseGetProjects();
   // Sample audits data
   const audits = [
     {
@@ -105,11 +99,7 @@ export default function AuditsPage() {
 
   return (
     <>
-      <DashboardHeader
-        activeProject={activeProject}
-        projects={projects}
-        onProjectChange={setActiveProject}
-      />
+      <DashboardHeader />
 
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-7xl mx-auto">

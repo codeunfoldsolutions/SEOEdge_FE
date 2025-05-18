@@ -55,6 +55,8 @@ export default function SignIn() {
       setFormError(null);
       toast.success("Logged in successfully!");
 
+      localStorage.setItem("refreshToken", data.data.session.refreshToken);
+      localStorage.setItem("token", data.data.session.accessToken);
       // If "Remember me" is checked, you might want to store some data
       if (rememberMe) {
         localStorage.setItem("rememberUser", form.getValues().email);
@@ -79,9 +81,11 @@ export default function SignIn() {
     setFormError(null);
     try {
       await loginMutation.mutateAsync(data);
+      return true;
     } catch (error) {
       // Error is handled in onError callback
       console.log(error);
+      return false;
     }
   };
 

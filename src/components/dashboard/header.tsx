@@ -13,17 +13,13 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 
-interface HeaderProps {
-  activeProject: string;
-  projects: Array<{ name: string }>;
-  onProjectChange?: (project: string) => void;
-}
+import { useState } from "react";
+import UseGetProjects from "@/adapters/apis/useGetProjects";
 
-export function DashboardHeader({
-  activeProject,
-  projects,
-  onProjectChange,
-}: HeaderProps) {
+export function DashboardHeader() {
+  const [activeProject, setActiveProject] = useState("example.com");
+  const { projects } = UseGetProjects();
+
   return (
     <header className="h-16 border-b border-border flex items-center px-4 bg-white">
       <div className="flex items-center gap-4 flex-1">
@@ -37,7 +33,7 @@ export function DashboardHeader({
           <Link href={`/audit-results`}>
             <Button
               size="sm"
-              className="absolute right-1 top-1/2 -translate-y-1/2 text-xs font-medium "
+              className="absolute right-1 top-1/2 -translate-y-1/2 text-xs font-medium bg-primary-blue hover:bg-secondry-blue"
             >
               Run Quick Audit <ArrowRight size={14} className="ml-1" />
             </Button>
@@ -45,14 +41,14 @@ export function DashboardHeader({
         </div>
 
         <div className="flex items-center gap-4 ml-auto">
-          <Select defaultValue={activeProject} onValueChange={onProjectChange}>
+          <Select defaultValue={activeProject} onValueChange={setActiveProject}>
             <SelectTrigger className="w-[180px] h-9 text-sm">
               <SelectValue placeholder="Select project" />
             </SelectTrigger>
             <SelectContent>
               {projects.map((project) => (
-                <SelectItem key={project.name} value={project.name}>
-                  {project.name}
+                <SelectItem key={project.id} value={project.url}>
+                  {project.url}
                 </SelectItem>
               ))}
             </SelectContent>

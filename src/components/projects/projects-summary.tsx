@@ -1,26 +1,15 @@
-"use client"
+"use client";
 
-import { Globe, AlertCircle, CheckCircle, Zap } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Globe, AlertCircle, CheckCircle, Zap } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ProjectOverviewData } from "@/adapters/types/Seo/ProjectAdapterTypes";
 
-interface ProjectsSummaryProps {
-  projects: Array<{
-    id: number
-    name: string
-    url: string
-    score: number
-    status: string
-    issues: number
-  }>
+interface ProjectOverviewProps {
+  overview?: ProjectOverviewData;
+  isLoading: boolean;
 }
 
-export function ProjectsSummary({ projects }: ProjectsSummaryProps) {
-  // Calculate summary statistics
-  const totalProjects = projects.length
-  const activeProjects = projects.filter((p) => p.status === "active").length
-  const totalIssues = projects.reduce((sum, project) => sum + project.issues, 0)
-  const averageScore = Math.round(projects.reduce((sum, project) => sum + project.score, 0) / totalProjects)
-
+export function ProjectsSummary({ overview, isLoading }: ProjectOverviewProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <Card>
@@ -30,7 +19,7 @@ export function ProjectsSummary({ projects }: ProjectsSummaryProps) {
           </div>
           <div>
             <p className="text-sm text-gray">Total Projects</p>
-            <p className="text-2xl font-bold">{totalProjects}</p>
+            <p className="text-2xl font-bold">{overview?.totalProjects}</p>
           </div>
         </CardContent>
       </Card>
@@ -42,7 +31,7 @@ export function ProjectsSummary({ projects }: ProjectsSummaryProps) {
           </div>
           <div>
             <p className="text-sm text-gray">Active Projects</p>
-            <p className="text-2xl font-bold">{activeProjects}</p>
+            <p className="text-2xl font-bold">{overview?.activeProjects}</p>
           </div>
         </CardContent>
       </Card>
@@ -54,7 +43,7 @@ export function ProjectsSummary({ projects }: ProjectsSummaryProps) {
           </div>
           <div>
             <p className="text-sm text-gray">Total Issues</p>
-            <p className="text-2xl font-bold">{totalIssues}</p>
+            <p className="text-2xl font-bold">{overview?.totalIssues}</p>
           </div>
         </CardContent>
       </Card>
@@ -66,11 +55,10 @@ export function ProjectsSummary({ projects }: ProjectsSummaryProps) {
           </div>
           <div>
             <p className="text-sm text-gray">Average Score</p>
-            <p className="text-2xl font-bold">{averageScore}</p>
+            <p className="text-2xl font-bold">{overview?.averageScore}</p>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

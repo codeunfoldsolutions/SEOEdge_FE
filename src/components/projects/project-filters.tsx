@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Filter, Download, Grid, List } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Filter, Download, Grid, List } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,17 +11,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ProjectFiltersProps {
-  statusFilter: string
-  onStatusChange: (status: string) => void
-  searchQuery: string
-  onSearchChange: (query: string) => void
+  statusFilter: string;
+  onStatusChange: (status: string) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
-export function ProjectFilters({ statusFilter, onStatusChange, searchQuery, onSearchChange }: ProjectFiltersProps) {
+export function ProjectFilters({
+  statusFilter,
+  onStatusChange,
+  searchQuery,
+  onSearchChange,
+}: ProjectFiltersProps) {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
       <div className="relative w-full sm:w-auto max-w-sm">
@@ -37,7 +42,11 @@ export function ProjectFilters({ statusFilter, onStatusChange, searchQuery, onSe
       </div>
 
       <div className="flex items-center gap-2 w-full sm:w-auto">
-        <Tabs defaultValue={statusFilter} onValueChange={onStatusChange} className="w-full sm:w-auto">
+        <Tabs
+          defaultValue={statusFilter}
+          onValueChange={onStatusChange}
+          className="w-full sm:w-auto"
+        >
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="active">Active</TabsTrigger>
@@ -75,17 +84,24 @@ export function ProjectFilters({ statusFilter, onStatusChange, searchQuery, onSe
         </Button>
 
         <div className="hidden sm:flex border rounded-md">
-          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-r-none">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 rounded-r-none"
+          >
             <Grid size={16} />
           </Button>
-          <Button variant="outline" size="icon" className="h-10 w-10 border-0 rounded-l-none">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-10 w-10 border-0 rounded-l-none"
+          >
             <List size={16} />
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-import { Search } from "lucide-react"
-
+import { Search } from "lucide-react";

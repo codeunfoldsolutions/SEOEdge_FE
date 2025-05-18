@@ -12,15 +12,7 @@ import Link from "next/link";
 
 export default function AuditsComparePage() {
   const searchParams = useSearchParams();
-  const [activeProject, setActiveProject] = useState("example.com");
   const [selectedAudits, setSelectedAudits] = useState<number[]>([]);
-
-  // Sample projects
-  const projects = [
-    { name: "example.com", lastAudit: "2 hours ago", score: 78 },
-    { name: "myshop.com", lastAudit: "1 day ago", score: 65 },
-    { name: "blog.example.com", lastAudit: "3 days ago", score: 92 },
-  ];
 
   // Sample audits data
 
@@ -144,11 +136,7 @@ export default function AuditsComparePage() {
 
   return (
     <>
-      <DashboardHeader
-        activeProject={activeProject}
-        projects={projects}
-        onProjectChange={setActiveProject}
-      />
+      <DashboardHeader />
 
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-7xl mx-auto">

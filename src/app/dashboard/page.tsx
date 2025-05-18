@@ -12,17 +12,11 @@ import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { CriticalIssues } from "@/components/dashboard/critical-issues";
 import { OverviewMetrics } from "@/components/dashboard/overview-metrics";
 import { AuditHistory } from "@/components/dashboard/audit-history";
+import UseGetProjects from "@/adapters/apis/useGetProjects";
 
 export default function Dashboard() {
-  // const [activePage, setActivePage] = useState(1)
   const [activeProject, setActiveProject] = useState("example.com");
-
-  // Sample projects - would come from API in a real app
-  const projects = [
-    { name: "example.com", lastAudit: "2 hours ago", score: 78 },
-    { name: "myshop.com", lastAudit: "1 day ago", score: 65 },
-    { name: "blog.example.com", lastAudit: "3 days ago", score: 92 },
-  ];
+  const { projects } = UseGetProjects();
 
   // Category metrics
   const categoryMetrics = [
@@ -101,11 +95,7 @@ export default function Dashboard() {
   return (
     <>
       {/* Header */}
-      <DashboardHeader
-        activeProject={activeProject}
-        projects={projects}
-        onProjectChange={setActiveProject}
-      />
+      <DashboardHeader />
 
       {/* Content */}
       <main className="flex-1 overflow-auto p-6">
