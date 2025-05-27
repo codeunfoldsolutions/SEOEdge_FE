@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 
 interface PerformanceChartProps {
-  title: string
-  subtitle: string
+  title: string;
+  subtitle: string;
 }
 
 export function PerformanceChart({ title, subtitle }: PerformanceChartProps) {
@@ -36,7 +36,11 @@ export function PerformanceChart({ title, subtitle }: PerformanceChartProps) {
         {/* Chart visualization */}
         <div className="ml-10 h-full relative">
           {/* Line chart - simplified representation */}
-          <svg className="w-full h-full" viewBox="0 0 600 200" preserveAspectRatio="none">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 600 200"
+            preserveAspectRatio="none"
+          >
             <path
               d="M0,100 C50,120 100,130 150,90 C200,50 250,40 300,60 C350,80 400,30 450,20 C500,10 550,30 600,20"
               fill="none"
@@ -49,7 +53,7 @@ export function PerformanceChart({ title, subtitle }: PerformanceChartProps) {
           <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2">
             <div className="relative">
               <div className="bg-[#1d1f2c] text-white px-3 py-1 rounded text-sm font-medium mb-2 whitespace-nowrap">
-                Score: 78/100
+                Score: 40/100
               </div>
               <div className="w-4 h-4 rounded-full bg-white border-4 border-primary mx-auto"></div>
             </div>
@@ -69,6 +73,5 @@ export function PerformanceChart({ title, subtitle }: PerformanceChartProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

@@ -13,11 +13,12 @@ import { CriticalIssues } from "@/components/dashboard/critical-issues";
 import { OverviewMetrics } from "@/components/dashboard/overview-metrics";
 import { AuditHistory } from "@/components/dashboard/audit-history";
 import UseGetProjects from "@/adapters/apis/useGetProjects";
+import { useAuth } from "@/adapters/utils/auth-context";
 
 export default function Dashboard() {
   const [activeProject, setActiveProject] = useState("example.com");
-  const { projects } = UseGetProjects();
-
+  const { dashboardProjects } = UseGetProjects();
+  const { user } = useAuth();
   // Category metrics
   const categoryMetrics = [
     {
@@ -90,7 +91,45 @@ export default function Dashboard() {
     { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
     { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
     { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
+    { date: "Aug 15, 2023", score: 78, issues: 42, change: "+3" },
+    { date: "Jul 30, 2023", score: 75, issues: 48, change: "+5" },
+    { date: "Jul 15, 2023", score: 70, issues: 56, change: "-2" },
+    { date: "Jun 30, 2023", score: 72, issues: 51, change: "+7" },
+    { date: "Jun 15, 2023", score: 65, issues: 64, change: "+0" },
   ];
+
+  const triggerClass =
+    "data-[state=active]:bg-primary data-[state=active]:text-white";
 
   return (
     <>
@@ -101,19 +140,24 @@ export default function Dashboard() {
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-7xl mx-auto">
           {/* Welcome Section */}
-          <WelcomeSection userName="Darcy" />
+          <WelcomeSection userName={user?.firstName ?? "Guest"} />
 
           {/* Project Cards */}
-          <ProjectsGrid projects={projects} activeProject={activeProject} />
+          <ProjectsGrid
+            projects={dashboardProjects}
+            activeProject={activeProject}
+          />
 
           {/* Tabs for Active Project */}
           <Tabs defaultValue="overview" className="mb-8">
-            <TabsList className="mb-4 bg-primary-blue/10">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="issues">Issues</TabsTrigger>
-              <TabsTrigger value="performance">Performance</TabsTrigger>
-              <TabsTrigger value="seo">SEO</TabsTrigger>
-              <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsList className="mb-4 bg-primary/10">
+              {["overview", "issues", "performance", "seo", "content"].map(
+                (tab) => (
+                  <TabsTrigger key={tab} value={tab} className={triggerClass}>
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </TabsTrigger>
+                )
+              )}
             </TabsList>
 
             <TabsContent value="overview">

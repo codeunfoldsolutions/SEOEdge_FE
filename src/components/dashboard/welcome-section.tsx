@@ -3,11 +3,7 @@
 import { RefreshCw, Calendar, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface WelcomeSectionProps {
-  userName: string;
-}
-
-export function WelcomeSection({ userName }: WelcomeSectionProps) {
+export function WelcomeSection({ userName }: { userName: string }) {
   return (
     <div className="flex justify-between items-start mb-8">
       <div>

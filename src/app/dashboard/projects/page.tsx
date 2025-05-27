@@ -1,47 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { ProjectsTable } from "@/components/projects/projects-table";
 import { ProjectsSummary } from "@/components/projects/projects-summary";
 import { ProjectFilters } from "@/components/projects/project-filters";
 import { AddProjectModal } from "@/components/modals/add-project-modal";
 import UseGetProjects from "@/adapters/apis/useGetProjects";
-// import { ProjectListItem } from "@/adapters/types/Seo/ProjectAdapterTypes";
-
-// import { SeoProject, useSeoProjectQuery } from "@/adapters/SeoProjectAdapter";
 
 export default function ProjectsPage() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { overview, projects, isOverviewLoading } = UseGetProjects();
-
-  // Fetch projects from the server or API
-  // const {
-  //   data: overviewData,
-  //   isLoading: isOverviewLoading,
-  //   isError,
-  //   isSuccess: isOverviewSuccess,
-  // } = useSeoProjectQuery({
-  //   queryCallback: SeoProject.getProjectOverview,
-  //   queryKey: ["overview"],
-  // });
-
-  // const {
-  //   data: projectsData,
-  //   isLoading: isProjectsLoading,
-  //   isSuccess: isProjectsSuccess,
-  // } = useSeoProjectQuery({
-  //   queryCallback: SeoProject.getAllProject,
-  //   queryKey: ["projects"],
-  // });
-
-  // const overview = isOverviewSuccess ? overviewData.data : undefined;
-
-  // const projects: ProjectListItem[] = isProjectsSuccess
-  //   ? projectsData.data
-  //   : [];
+  // import { ProjectListItem } from "@/adapters/types/Seo/ProjectAdapterTypes";
+  const { projectsOverview, projects, isProjectsOverviewLoading } =
+    UseGetProjects();
 
   // Filter projects based on status and search query
 
@@ -72,7 +45,10 @@ export default function ProjectsPage() {
           </div>
 
           {/* Summary stats */}
-          <ProjectsSummary isLoading={isOverviewLoading} overview={overview} />
+          <ProjectsSummary
+            isLoading={isProjectsOverviewLoading}
+            overview={projectsOverview}
+          />
 
           {/* Filters */}
           <ProjectFilters

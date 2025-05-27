@@ -23,20 +23,19 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
   return (
     <Card
       className={`border ${
-        isActive
-          ? "bg-primary-blue text-primary-white border-primary-blue"
-          : "border-border"
+        isActive ? "bg-primary text-secondary border-primary" : "border-border"
       }`}
     >
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <div>
           <h3 className="text-base font-medium">{project.url}</h3>
           <p className="text-xs text-gray flex items-center mt-1">
-            <Clock size={12} className="mr-1" /> Last audit: {project.updatedAt}
+            <Clock size={12} className="mr-1" /> Last audit:{" "}
+            {new Date(project.updatedAt).toLocaleDateString("en-US")}
           </p>
         </div>
         <div
-          className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-white ${
             project.score >= 80
               ? "bg-success"
               : project.score >= 60

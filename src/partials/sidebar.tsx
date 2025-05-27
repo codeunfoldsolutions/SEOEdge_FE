@@ -84,12 +84,11 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
     <div className="w-[190px] border-r border-border flex flex-col bg-sidebar-background">
       <div className="p-4 border-b border-border">
         <Link href="/dashboard">
-          <div className="grid place-items-center">
+          <div className="flex justify-center">
             <Image
               src={"/seoedge logo.png"}
-              width={180}
+              width={140}
               height={40}
-              style={{ height: "auto" }}
               alt="Logo"
             />
           </div>
@@ -108,8 +107,8 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
                 href={item.href}
                 className={`flex items-center gap-3 p-2 rounded-md ${
                   lastSegment.includes(item.name)
-                    ? "bg-primary-blue text-primary-white"
-                    : "text-foreground hover:bg-primary-blue/10"
+                    ? "bg-primary/10 text-primary"
+                    : "text-foreground hover:bg-muted"
                 }`}
               >
                 <item.icon size={18} />
@@ -123,26 +122,26 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
           <p className="text-xs text-gray uppercase font-medium mb-3">
             SUBSCRIPTION
           </p>
-          <div className="bg-primary-blue text-primary-white rounded-md p-3 mb-3">
+          <div className="bg-primary/5 rounded-md p-3 mb-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium">{subscription.plan}</span>
               <Badge
                 variant="outline"
-                className="bg-secondry-blue  border-primary/10 text-xs text-primary-white"
+                className="bg-primary/10 text-primary border-primary/10 text-xs"
               >
                 Active
               </Badge>
             </div>
-            <div className="space-y-1 text-xs">
+            <div className="space-y-1 text-xs text-gray">
               <div className="flex items-center justify-between">
                 <span>Audits Remaining:</span>
-                <span className="font-medium">
+                <span className="font-medium text-foreground">
                   {subscription.auditsRemaining}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Next Billing:</span>
-                <span className="font-medium">
+                <span className="font-medium text-foreground">
                   {subscription.nextBillingDate}
                 </span>
               </div>

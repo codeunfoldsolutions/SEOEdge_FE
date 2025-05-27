@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import TanstackQueryProvider from "@/providers/tanstack-query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/adapters/utils/auth-context";
 
 export const metadata: Metadata = {
   title: "SEO Edge - SEO Analytics Dashboard",
@@ -18,10 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <TanstackQueryProvider>{children}</TanstackQueryProvider>
-        </ThemeProvider>
-
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <TanstackQueryProvider>{children}</TanstackQueryProvider>
+          </ThemeProvider>
+        </AuthProvider>
         <Toaster richColors />
       </body>
     </html>

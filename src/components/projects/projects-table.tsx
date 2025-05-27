@@ -125,7 +125,9 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                   </Badge>
                 )}
               </TableCell>
-              <TableCell>{project.updatedAt}</TableCell>
+              <TableCell>
+                {new Date(project.updatedAt).toLocaleDateString()}
+              </TableCell>
 
               <TableCell>
                 <Badge

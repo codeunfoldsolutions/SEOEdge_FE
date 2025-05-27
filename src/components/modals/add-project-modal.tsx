@@ -26,31 +26,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
+
 import {
   SeoProject,
   useSeoProjectMutation,
 } from "@/adapters/SeoProjectAdapter";
 
 import { ProjectCreate } from "@/adapters/types/Seo/ProjectAdapterTypes";
-
+import { addProjectSchema } from "@/lib/validations/addProject";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-// Define create project schema
-const ProjectSchema = z.object({
-  url: z.string().url("Please enter a valid URL"),
-  title: z.string().min(1, "Project title is required"),
-  description: z.string().min(1, "Description title is required"),
-  type: z.enum(["blog", "ecommerce", "business", "other"]),
-});
 
 export function AddProjectModal() {
   const [open, setOpen] = useState(false);
   const [formError, setFormError] = useState<string | number | null>(null);
 
   const form = useForm<ProjectCreate>({
-    resolver: zodResolver(ProjectSchema),
+    resolver: zodResolver(addProjectSchema),
   });
 
   const createProjectMutation = useSeoProjectMutation({

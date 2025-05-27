@@ -54,20 +54,25 @@ export function DashboardHeader() {
             </SelectContent>
           </Select>
 
-          <Button variant="ghost" size="icon">
-            <Settings size={20} />
-          </Button>
+          <Link href={`/dashboard/settings`}>
+            <Button variant="ghost" size="icon">
+              <Settings size={20} />
+            </Button>
+          </Link>
+
           <Button variant="ghost" size="icon">
             <Bell size={20} />
           </Button>
           <div className="w-8 h-8 rounded-full bg-[#f0f1f3] overflow-hidden">
-            <Image
-              src="/placeholder.svg?height=32&width=32"
-              alt="User avatar"
-              width={32}
-              height={32}
-              className="object-cover"
-            />
+            <Link href={`/profile`}>
+              <Image
+                src="/placeholder.svg?height=32&width=32"
+                alt="User avatar"
+                width={32}
+                height={32}
+                className="object-cover"
+              />
+            </Link>
           </div>
         </div>
       </div>

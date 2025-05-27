@@ -27,6 +27,13 @@ const SeoProject = {
     return response;
   },
 
+  getProjectForDashboard: async () => {
+    const response = await projectService.fetch<AllProjectsResponse>(
+      `/dashboard/project`
+    );
+    return response;
+  },
+
   createProject: async ({ payload }: MutationCallBackArgs<ProjectCreate>) => {
     const response = await projectService.mutate({
       slug: `project/create`,

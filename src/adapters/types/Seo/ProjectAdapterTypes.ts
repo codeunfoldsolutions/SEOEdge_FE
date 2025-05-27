@@ -20,11 +20,11 @@ export type ProjectListItem = {
 };
 
 export type AllProjectsResponse = {
+  data: ProjectListItem[];
   info: {
     prev: string | null;
     next: string | null;
   };
-  data: ProjectListItem[];
 };
 
 export type ProjectCreate = {

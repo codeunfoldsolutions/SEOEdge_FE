@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Calendar,
   History,
@@ -30,6 +31,19 @@ interface AuditHistoryProps {
 }
 
 export function AuditHistory({ audits }: AuditHistoryProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const totalPages = Math.ceil(audits.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentAudits = audits.slice(startIndex, startIndex + itemsPerPage);
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg border border-border p-6">
       <div className="flex justify-between items-center mb-4">
@@ -52,20 +66,18 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-12 hover:bg-primary-blue/10">#</TableHead>
-            <TableHead className="hover:bg-primary-blue/10">Date</TableHead>
-            <TableHead className="hover:bg-primary-blue/10">Score</TableHead>
-            <TableHead className="hover:bg-primary-blue/10">Issues</TableHead>
-            <TableHead className="hover:bg-primary-blue/10">Change</TableHead>
-            <TableHead className="text-right hover:bg-primary-blue/10">
-              Actions
-            </TableHead>
+            <TableHead className="w-12 ">#</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Score</TableHead>
+            <TableHead>Issues</TableHead>
+            <TableHead>Change</TableHead>
+            <TableHead className="text-right ">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {audits.map((audit, index) => (
-            <TableRow key={index} className="hover:bg-primary-blue/10">
-              <TableCell>{index + 1}</TableCell>
+          {currentAudits.map((audit, index) => (
+            <TableRow key={startIndex + index} className="hover:bg-primary/10">
+              <TableCell>{startIndex + index + 1}</TableCell>
               <TableCell>{audit.date}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
@@ -133,22 +145,54 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
       </Table>
 
       <div className="flex items-center justify-between mt-4 text-sm">
-        <div>Showing 5 items per page</div>
+        <div>Showing {itemsPerPage} items per page</div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
             <ChevronLeft size={16} />
           </Button>
+
+          {/* Previous page button */}
+          {currentPage > 1 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => goToPage(currentPage - 1)}
+            >
+              {currentPage - 1}
+            </Button>
+          )}
+
+          {/* Current page button */}
           <Button variant="default" size="icon" className="h-8 w-8">
-            1
+            {currentPage}
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            2
-          </Button>
-          <div className="px-2">...</div>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            4
-          </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+
+          {/* Next page button */}
+          {currentPage < totalPages && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => goToPage(currentPage + 1)}
+            >
+              {currentPage + 1}
+            </Button>
+          )}
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
             <ChevronRight size={16} />
           </Button>
         </div>

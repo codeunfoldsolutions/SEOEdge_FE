@@ -22,6 +22,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 
+import { LoginResponse } from "@/adapters/types/AuthAdapterTypes";
+import { useAuth } from "@/adapters/utils/auth-context";
+
 // Define login schema
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -35,7 +38,9 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const router = useRouter();
-  const date = new Date();
+  const date = new Date().getUTCFullYear();
+
+  const { setUser } = useAuth();
 
   // Initialize form with validation
   const form = useForm<LoginSchema>({
@@ -53,10 +58,16 @@ export default function SignIn() {
 
     onSuccess: (data) => {
       setFormError(null);
+      setUser(data.data.user);
       toast.success("Logged in successfully!");
 
-      localStorage.setItem("refreshToken", data.data.session.refreshToken);
-      localStorage.setItem("token", data.data.session.accessToken);
+      const {
+        session: { accessToken, refreshToken },
+      } = data.data;
+
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
       // If "Remember me" is checked, you might want to store some data
       if (rememberMe) {
         localStorage.setItem("rememberUser", form.getValues().email);
@@ -241,7 +252,7 @@ export default function SignIn() {
 
       {/* Footer */}
       <div className="mt-8 text-center text-sm text-[#959595]">
-        <p>© {date.getUTCFullYear()} SEO Edge. All rights reserved.</p>
+        <p>© {date} SEO Edge. All rights reserved.</p>
       </div>
     </div>
   );
