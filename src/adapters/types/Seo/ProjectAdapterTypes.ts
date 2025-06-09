@@ -19,6 +19,20 @@ export type ProjectListItem = {
   id: string;
 };
 
+export type CreateProjectResponse = {
+  ownerId: string;
+  url: string;
+  title: string;
+  active: boolean;
+  score: number;
+  description: string;
+  criticalCount: number;
+  keywords: string[];
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
 export type AllProjectsResponse = {
   data: ProjectListItem[];
   info: {

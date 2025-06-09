@@ -61,12 +61,12 @@ export function DashboardSidebar({ subscription }: SidebarProps) {
     //   icon: Shield,
     //   href: "/dashboard/competitors",
     // },
-    {
-      name: "reports",
-      label: "Reports",
-      icon: FileText,
-      href: "/dashboard/reports",
-    },
+    // {
+    //   name: "reports",
+    //   label: "Reports",
+    //   icon: FileText,
+    //   href: "/dashboard/reports",
+    // },
     {
       name: "settings",
       label: "Settings",

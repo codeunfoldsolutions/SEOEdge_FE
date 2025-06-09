@@ -18,76 +18,77 @@ export default function AuditsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { projects } = UseGetProjects();
 
-  const { auditsOverview, audits } = UseGetAudits();
+  // const { auditsOverview, audits } = UseGetAudits();
 
   // Sample audits data
-  // const audits = [
-  //   {
-  //     id: 1,
-  //     project: "example.com",
-  //     date: "Aug 15, 2023",
-  //     time: "10:30 AM",
-  //     score: 78,
-  //     previousScore: 75,
-  //     status: "completed",
-  //     issues: 42,
-  //     duration: "1m 42s",
-  //     change: "+3",
-  //     type: "manual",
-  //   },
-  //   {
-  //     id: 2,
-  //     project: "myshop.com",
-  //     date: "Aug 14, 2023",
-  //     time: "3:15 PM",
-  //     score: 65,
-  //     previousScore: 70,
-  //     status: "completed",
-  //     issues: 58,
-  //     duration: "2m 10s",
-  //     change: "-5",
-  //     type: "scheduled",
-  //   },
-  //   {
-  //     id: 3,
-  //     project: "blog.example.com",
-  //     date: "Aug 12, 2023",
-  //     time: "9:45 AM",
-  //     score: 92,
-  //     previousScore: 87,
-  //     status: "completed",
-  //     issues: 8,
-  //     duration: "1m 20s",
-  //     change: "+5",
-  //     type: "manual",
-  //   },
-  //   {
-  //     id: 4,
-  //     project: "example.com",
-  //     date: "Aug 10, 2023",
-  //     time: "2:30 PM",
-  //     score: 75,
-  //     previousScore: 72,
-  //     status: "completed",
-  //     issues: 48,
-  //     duration: "1m 38s",
-  //     change: "+3",
-  //     type: "scheduled",
-  //   },
-  //   {
-  //     id: 5,
-  //     project: "example.com",
-  //     date: "Aug 15, 2023",
-  //     time: "11:45 AM",
-  //     score: null,
-  //     previousScore: 78,
-  //     status: "running",
-  //     issues: null,
-  //     duration: "0m 45s",
-  //     change: null,
-  //     type: "manual",
-  //   },
-  // ];
+
+  const audits = [
+    {
+      id: 1,
+      project: "example.com",
+      date: "Aug 15, 2023",
+      time: "10:30 AM",
+      score: 78,
+      previousScore: 75,
+      status: "completed",
+      issues: 42,
+      duration: "1m 42s",
+      change: "+3",
+      type: "manual",
+    },
+    {
+      id: 2,
+      project: "myshop.com",
+      date: "Aug 14, 2023",
+      time: "3:15 PM",
+      score: 65,
+      previousScore: 70,
+      status: "completed",
+      issues: 58,
+      duration: "2m 10s",
+      change: "-5",
+      type: "scheduled",
+    },
+    {
+      id: 3,
+      project: "blog.example.com",
+      date: "Aug 12, 2023",
+      time: "9:45 AM",
+      score: 92,
+      previousScore: 87,
+      status: "completed",
+      issues: 8,
+      duration: "1m 20s",
+      change: "+5",
+      type: "manual",
+    },
+    {
+      id: 4,
+      project: "example.com",
+      date: "Aug 10, 2023",
+      time: "2:30 PM",
+      score: 75,
+      previousScore: 72,
+      status: "completed",
+      issues: 48,
+      duration: "1m 38s",
+      change: "+3",
+      type: "scheduled",
+    },
+    {
+      id: 5,
+      project: "example.com",
+      date: "Aug 15, 2023",
+      time: "11:45 AM",
+      score: null,
+      previousScore: 78,
+      status: "running",
+      issues: null,
+      duration: "0m 45s",
+      change: null,
+      type: "manual",
+    },
+  ];
 
   // Filter audits based on status, project, and search query
   const filteredAudits = audits.filter((audit) => {
@@ -110,7 +111,7 @@ export default function AuditsPage() {
           {/* Header with title and actions */}
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-bold mb-1">Audits</h1>
+              <h1 className="text-2xl font-bold mb-1">Audits History</h1>
               <p className="text-gray">View and manage your SEO audits</p>
             </div>
             <div className="flex items-center gap-2">

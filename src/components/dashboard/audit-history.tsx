@@ -86,7 +86,7 @@ export function AuditHistory({ audits }: AuditHistoryProps) {
                       audit.score >= 80
                         ? "text-success"
                         : audit.score >= 60
-                        ? "text-warning"
+                        ? ""
                         : "text-danger"
                     }
                   >

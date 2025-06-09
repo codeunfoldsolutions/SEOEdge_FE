@@ -1,5 +1,4 @@
 import { SeoProject, useSeoProjectQuery } from "@/adapters/SeoProjectAdapter";
-import { ProjectListItem } from "@/adapters/types/Seo/ProjectAdapterTypes";
 
 const UseGetProjects = () => {
   const {
@@ -9,7 +8,7 @@ const UseGetProjects = () => {
     isSuccess: isProjectsOverviewSuccess,
   } = useSeoProjectQuery({
     queryCallback: SeoProject.getProjectOverview,
-    queryKey: ["projectOverview"],
+    queryKey: ["projectOverview" + new Date().toISOString()],
   });
 
   const {
@@ -19,7 +18,7 @@ const UseGetProjects = () => {
     isError: isProjectsError,
   } = useSeoProjectQuery({
     queryCallback: SeoProject.getAllProject,
-    queryKey: ["projects"],
+    queryKey: ["projects" + new Date().toISOString()],
   });
 
   const {
@@ -29,18 +28,16 @@ const UseGetProjects = () => {
     isError: isDashboardProjectsError,
   } = useSeoProjectQuery({
     queryCallback: SeoProject.getAllProject,
-    queryKey: ["dashboardProjects"],
+    queryKey: ["dashboardProjects" + new Date().toISOString()],
   });
 
   const projectsOverview = isProjectsOverviewSuccess
     ? projectsOverviewData?.data
     : undefined;
 
-  const projects: ProjectListItem[] = isProjectsSuccess
-    ? projectsData?.data
-    : [];
+  const projects = isProjectsSuccess ? projectsData?.data : [];
 
-  const dashboardProjects: ProjectListItem[] = isDashboardProjectsSuccess
+  const dashboardProjects = isDashboardProjectsSuccess
     ? dashboardProjectsData?.data
     : [];
 

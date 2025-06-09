@@ -35,7 +35,7 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
           </p>
         </div>
         <div
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-white ${
+          className={`w-7 h-7 p-4 text-xs rounded-full flex items-center justify-center text-white ${
             project.score >= 80
               ? "bg-success"
               : project.score >= 60

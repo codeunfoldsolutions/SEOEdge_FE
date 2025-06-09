@@ -22,6 +22,8 @@
   --destructive: #f4212e;
   --destructive-foreground: #ffffff;
 
+  --warning: #f59e0b;
+
   --success: #008000;
   --success-foreground: #ffffff;
 
@@ -131,6 +133,9 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
+  --color-warning: var(--warning);
+
   --color-danger: var(--destructive);
   --color-danger-foreground: var(--destructive-foreground);
 

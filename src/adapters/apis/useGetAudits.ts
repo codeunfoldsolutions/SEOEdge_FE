@@ -1,10 +1,11 @@
-import { SeoAudit } from "../SeoAuditAdapter copy";
-import { AuditListItem } from "../types/Seo/AuditAdapterTypes";
+import { SeoAudit } from "../SeoAuditAdapter";
 import TanstackWrapper from "../utils/tanstack-wrapper";
 
 const useSeoAuditQuery = TanstackWrapper.query;
+const useSeoAuditMutation = TanstackWrapper.mutation;
 
 const UseGetAudits = () => {
+  // Additional queries for audits overview and all audits
   const {
     data: auditOverviewData,
     isLoading: isAuditsOverviewLoading,
@@ -21,14 +22,26 @@ const UseGetAudits = () => {
     isSuccess: isAuditsSuccess,
   } = useSeoAuditQuery({
     queryCallback: SeoAudit.getAllAudits,
-    queryKey: ["audits"],
+    queryKey: ["allaudits" + new Date().toISOString()],
+  });
+
+  const {
+    mutate: createNewAudit,
+    data: createAuditData,
+    isSuccess: isCreateAuditSuccess,
+    isError: isCreateAuditError,
+    isPending: isCreateAuditPending,
+  } = useSeoAuditMutation({
+    mutationCallback({ payload, params }) {
+      return SeoAudit.createAudit(params || "");
+    },
   });
 
   const auditsOverview = isAuditsOverviewSuccess
     ? auditOverviewData?.data
     : undefined;
 
-  const audits: AuditListItem[] = isAuditsSuccess ? auditsData?.data : [];
+  const audits = isAuditsSuccess ? auditsData?.data : [];
 
   return {
     auditsOverview,
@@ -36,6 +49,13 @@ const UseGetAudits = () => {
     isAuditsLoading,
     isError,
     audits,
+
+    // add these to expose mutation to components
+    createNewAudit,
+    createAuditData,
+    isCreateAuditSuccess,
+    isCreateAuditError,
+    isCreateAuditPending,
   };
 };
 

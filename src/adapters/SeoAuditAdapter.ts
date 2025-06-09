@@ -5,34 +5,35 @@ import { MutationCallBackArgs } from "./types/TanstackUtilTypes";
 import {
   AllAuditsResponse,
   AuditOverviewData,
+  CreateAuditResponse,
 } from "./types/Seo/AuditAdapterTypes";
 
-const auditService = new ApiService("/seo");
+const auditService = new ApiService("/seo/audits");
 const useSeoAuditMutation = TanstackWrapper.mutation;
 const useSeoAuditQuery = TanstackWrapper.query;
 
 const SeoAudit = {
   getAuditsOverview: async () => {
     const response = await auditService.fetch<{ data: AuditOverviewData }>(
-      "/audits/overview"
+      "/overview"
     );
     return response;
   },
 
   getAllAudits: async () => {
-    const response = await auditService.fetch<AllAuditsResponse>(`/audits/all`);
+    const response = await auditService.fetch<AllAuditsResponse>(`/all`);
     return response;
   },
 
-  // createProject: async ({ payload }: MutationCallBackArgs<ProjectCreate>) => {
-  //   const response = await auditService.mutate({
-  //     slug: `project/create`,
-  //     payload,
-  //     type: "JSON",
-  //     method: "POST",
-  //   });
-  //   return response;
-  // },
+  createAudit: async (slug: string) => {
+    const response = await auditService.mutate<{}, CreateAuditResponse>({
+      slug,
+      payload: {},
+      type: "JSON",
+      method: "POST",
+    });
+    return response;
+  },
 };
 
 export { SeoAudit, useSeoAuditMutation, useSeoAuditQuery };

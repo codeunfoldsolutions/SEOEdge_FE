@@ -55,10 +55,10 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                 <ArrowUpDown size={14} className="ml-1" />
               </div>
             </TableHead>
-            <TableHead className="text-white font-bold">Score</TableHead>
-            <TableHead className="text-white font-bold">Issues</TableHead>
-            <TableHead className="text-white font-bold">Last Audit</TableHead>
-            <TableHead className="text-white font-bold">Status</TableHead>
+            <TableHead className=" font-bold">Score</TableHead>
+            <TableHead className=" font-bold">Issues</TableHead>
+            <TableHead className=" font-bold">Last Audit</TableHead>
+            <TableHead className=" font-bold">Status</TableHead>
             <TableHead className="text-right text-white font-bold">
               Actions
             </TableHead>
@@ -86,35 +86,36 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                 <div className="flex items-center gap-2">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium ${
-                      project.score <= 80
-                        ? "bg-red-600"
-                        : project.score >= 60
+                      project.score * 100 >= 70
+                        ? "bg-success"
+                        : project.score * 100 >= 50
                         ? "bg-warning"
                         : "bg-danger"
                     }`}
                   >
-                    {project.score}
+                    {project.score * 100}
                   </div>
                   <Progress
-                    value={project.score}
+                    value={project.score * 100}
                     className="h-1.5 w-12 ml-1"
                     indicatorClassName={
-                      project.score <= 80
+                      project.score * 100 <= 80
                         ? "bg-success"
-                        : project.score >= 60
+                        : project.score * 100 >= 60
                         ? "bg-warning"
                         : "bg-danger"
                     }
                   />
                 </div>
               </TableCell>
+
               <TableCell>
-                {project.score > 0 ? (
+                {project.score * 100 > 0 ? (
                   <Badge
                     variant="outline"
                     className="bg-danger/10 text-danger border-danger/10"
                   >
-                    {project.score} issues
+                    {project.score * 100} issues
                   </Badge>
                 ) : (
                   <Badge
@@ -125,6 +126,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                   </Badge>
                 )}
               </TableCell>
+
               <TableCell>
                 {new Date(project.updatedAt).toLocaleDateString()}
               </TableCell>
@@ -159,7 +161,9 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
                         <Search size={14} className="mr-2" />
-                        <span>Run Audit</span>
+                        <Link href={`dasboard/projects/${project.id}`}>
+                          <span>Run Audit</span>
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Globe size={14} className="mr-2" />

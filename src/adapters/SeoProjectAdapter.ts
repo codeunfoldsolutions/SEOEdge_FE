@@ -4,6 +4,7 @@ import { MutationCallBackArgs } from "./types/TanstackUtilTypes";
 import {
   AllProjectsResponse,
   ProjectOverviewData,
+  CreateProjectResponse,
 } from "./types/Seo/ProjectAdapterTypes";
 
 import { ProjectCreate } from "./types/Seo/ProjectAdapterTypes";
@@ -22,7 +23,7 @@ const SeoProject = {
 
   getAllProject: async () => {
     const response = await projectService.fetch<AllProjectsResponse>(
-      `/projects/all`
+      `/project/all`
     );
     return response;
   },
@@ -35,7 +36,10 @@ const SeoProject = {
   },
 
   createProject: async ({ payload }: MutationCallBackArgs<ProjectCreate>) => {
-    const response = await projectService.mutate({
+    const response = await projectService.mutate<
+      ProjectCreate,
+      CreateProjectResponse
+    >({
       slug: `project/create`,
       payload,
       type: "JSON",

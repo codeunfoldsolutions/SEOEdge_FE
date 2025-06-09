@@ -3,7 +3,8 @@
 import type React from "react";
 
 import { useState } from "react";
-import { AuditSidebar } from "@/components/audit/sidebar";
+
+import { ProjectViewSidebar } from "@/components/projects/project-view-sidebar";
 
 // This is a shared layout for all audit results pages
 export default function AuditResultsLayout({
@@ -92,7 +93,7 @@ export default function AuditResultsLayout({
     <div className="flex h-screen bg-background">
       {/* Sidebar - shared across all audit results pages */}
       {showSidebar && (
-        <AuditSidebar
+        <ProjectViewSidebar
           auditDetails={auditDetails}
           scores={scores}
           criticalIssues={criticalIssues}
