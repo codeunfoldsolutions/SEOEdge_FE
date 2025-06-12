@@ -46,7 +46,7 @@ import UseGetAudits from "@/adapters/apis/useGetAudits";
 
 export default function Project() {
   const [showSidebar, setshowSidebar] = useState(true);
-  const { projectId } = useParams() as { projectId: string };
+  const { auditresult } = useParams() as { auditresult: string };
 
   const {
     createNewAudit,
@@ -56,8 +56,8 @@ export default function Project() {
     createAuditData,
   } = UseGetAudits();
 
-  const handleCreateAudit = (projectId: string) => {
-    createNewAudit({ payload: null, params: projectId });
+  const handleCreateAudit = (auditresult: string) => {
+    createNewAudit({ payload: null, params: auditresult });
   };
   useEffect(() => {
     if (isCreateAuditSuccess) {
@@ -284,7 +284,7 @@ export default function Project() {
             <div className="flex items-center gap-2 mb-2">
               <Globe size={26} className="text-gray" />
 
-              <h1 className="text-2xl font-bold">{projectId}</h1>
+              <h1 className="text-2xl font-bold">{auditresult}</h1>
             </div>
 
             <div className="flex  items-center gap-2 mt-2">
@@ -345,7 +345,7 @@ export default function Project() {
             </TooltipProvider>
 
             <Button
-              onClick={() => handleCreateAudit(projectId)}
+              onClick={() => handleCreateAudit(auditresult)}
               disabled={isCreateAuditPending}
               className="gap-1"
             >

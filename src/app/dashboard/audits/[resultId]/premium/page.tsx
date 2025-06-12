@@ -51,6 +51,96 @@ export default function PremiumAuditResults() {
     ],
   };
 
+  //////////////////////////////api response data//////////////////////////////
+
+  const apiResponse = {
+    message: "New Audit created successfully",
+    data: {
+      ownerId: "681e4cc2e6c62f089c634fdc",
+      projectId: "6824c5fdf09379ba8608fad3",
+      duration: "8433",
+      type: "manual",
+      status: "completed",
+      criticalCount: 71,
+      score: 0.76,
+      categories: {
+        performance: 0.97,
+        accessibility: 0.93,
+        bestPractices: 1,
+        seo: 0.83,
+      },
+      audits: {
+        "is-on-https": {
+          score: 1,
+          description:
+            "All sites should be protected with HTTPS, even ones that don't handle sensitive data.",
+        },
+        "redirects-http": {
+          score: 0,
+          description:
+            "Make sure that you redirect all HTTP traffic to HTTPS in order to enable secure web features for all your users.",
+        },
+        viewport: {
+          score: 1,
+          description:
+            'A `<meta name="viewport">` not only optimizes your app for mobile screen sizes, but also prevents [a 300 millisecond delay to user input](https://developer.',
+        },
+        "first-contentful-paint": {
+          score: 0.84,
+          description:
+            "First Contentful Paint marks the time at which the first text or image is painted.",
+          displayValue: "2.0 s",
+        },
+        "first-meaningful-paint": {
+          score: 0,
+          description:
+            "First Meaningful Paint measures when the primary content of a page is visible.",
+        },
+        speedIndex: {
+          score: 0.99,
+          description:
+            "Speed Index shows how quickly the contents of a page are visibly populated.",
+          displayValue: "2.0 s",
+        },
+        "errors-in-console": {
+          score: 1,
+          description:
+            "Errors logged to the console indicate unresolved problems.",
+        },
+        interactive: {
+          score: 0.97,
+          description:
+            "Time to Interactive is the amount of time it takes for the page to become fully interactive.",
+          displayValue: "2.7 s",
+        },
+        "bootup-time": {
+          score: 1,
+          description:
+            "Consider reducing the time spent parsing, compiling, and executing JS.",
+          displayValue: "0.3 s",
+        },
+      },
+      createdAt: "2025-06-05T05:54:38.465Z",
+      updatedAt: "2025-06-05T05:54:38.465Z",
+      id: "6841311ea75529e5fd7bb08d",
+    },
+    fake: [
+      {
+        ownerId: "681e4cc2e6c62f089c634fdc",
+        url: "https://www.google.com",
+        title: "Google",
+        active: true,
+        score: 0.76,
+        description: "Some dummy description",
+        criticalCount: 71,
+        keywords: [],
+        createdAt: "2025-05-14T16:34:05.644Z",
+        updatedAt: "2025-06-05T05:54:38.627Z",
+        id: "6824c5fdf09379ba8608fad3",
+      },
+    ],
+  };
+
   // Overall score and category scores
   const scores = {
     overall: 72,
@@ -407,7 +497,7 @@ export default function PremiumAuditResults() {
 
           {/* Score Overview */}
           <ScoreOverview
-            scores={scores}
+            data={apiResponse.data}
             compareMode={compareMode}
             onCompare={() => setCompareMode(true)}
             comparisonData={comparisonData}

@@ -27,6 +27,7 @@ interface ScoreOverviewProps {
         displayValue?: string;
       };
     };
+
     createdAt: string;
     updatedAt: string;
     id: string;
@@ -211,7 +212,16 @@ export function ScoreOverview({
                 description={audit.description}
                 compareMode={compareMode}
                 comparisonData={
-                  comparisonData ? (comparisonData as any)[key] : undefined
+                  comparisonData
+                    ? (
+                        comparisonData as {
+                          [key: string]: {
+                            improved: boolean;
+                            percentage: string;
+                          };
+                        }
+                      )[key]
+                    : undefined
                 }
               />
             )

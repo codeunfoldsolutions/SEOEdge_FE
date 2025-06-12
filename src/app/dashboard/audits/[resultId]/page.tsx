@@ -48,13 +48,8 @@ import UseGetAudits from "@/adapters/apis/useGetAudits";
 //   };
 // }
 
-export default async function AuditResults({
-  params,
-}: {
-  params: Promise<{ resultId: string }>;
-}) {
+export default function AuditResults() {
   const [showSidebar, setShowSidebar] = useState(true);
-  const { resultId } = await params;
 
   // const {
   //   data: createAuditData,
@@ -309,7 +304,7 @@ export default async function AuditResults({
                 <div className="flex items-center gap-1">
                   <FileText size={14} />
                   <span>Pages scanned: {auditDetails.pagesScanned}</span>
-                  <h1>Product: {resultId}</h1>
+                  {/* <h1>Product: {resultId}</h1> */}
                 </div>
               </div>
             </div>

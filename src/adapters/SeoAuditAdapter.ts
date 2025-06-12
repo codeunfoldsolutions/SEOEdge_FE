@@ -26,9 +26,9 @@ const SeoAudit = {
   },
 
   createAudit: async (slug: string) => {
-    const response = await auditService.mutate<{}, CreateAuditResponse>({
+    const response = await auditService.mutate<undefined, CreateAuditResponse>({
       slug,
-      payload: {},
+      payload: undefined,
       type: "JSON",
       method: "POST",
     });
