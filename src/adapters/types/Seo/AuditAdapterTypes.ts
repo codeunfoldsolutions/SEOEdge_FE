@@ -1,35 +1,39 @@
-export type AuditOverviewData = {
+///////////////////////////// AuditOverview type for auditpage
+
+export type AuditOverviewResponse = {
   totalAudits: number;
   completedAudits: number;
   avgDuration: number;
   totalIssues: number;
   avgImprovement: number;
 };
+// ////////////////////////////////////////
 
+//////////////////////////// get all audits Response type
 export type AllAuditsResponse = {
-  data: AuditItem[];
-  info: {
-    next: string | null;
-    prev: string | null;
-  };
+  message: string;
+  data: AllAuditRecord[];
+  info: AuditListInfo;
 };
 
-type AuditItem = {
-  ownerId: string;
-  projectId: Project;
-  duration: string;
-  type: string;
-  status: string;
-  criticalCount: number;
+export type AllAuditCategoryScores = {
+  performance: number;
+  accessibility: number;
+  bestPractices: number;
+  seo: number;
+};
+
+export type AllAuditItem = {
   score: number;
-  categories: Categories;
-  audits: Record<string, AuditDetail>;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
+  description: string;
+  displayValue?: string;
 };
 
-type Project = {
+export type AllAuditDetails = {
+  [key: string]: AllAuditItem;
+};
+
+export type ProjectSummary = {
   ownerId: string;
   url: string;
   title: string;
@@ -40,74 +44,117 @@ type Project = {
   keywords: string[];
   createdAt: string;
   updatedAt: string;
+  auditsCount: number;
+  minorCount: number;
   id: string;
 };
 
-type Categories = {
+export type AllAuditRecord = {
+  ownerId: string;
+  projectId: ProjectSummary;
+  duration: string;
+  pdfUrl: string;
+  type: string;
+  status: string;
+  criticalCount: number;
+  score: number;
+  categories: AllAuditCategoryScores;
+  audits: AllAuditDetails;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
+export type AuditListInfo = {
+  next: string | null;
+  prev: string | null;
+};
+
+////////////////////////////////////////////
+
+////////////////////////////////////////////////// Create Audit Response types
+export type CreateAuditResponse = {
+  message: string;
+  data: CreatedAudit;
+};
+
+export type CreateAuditCategoryScore = {
   performance: number;
   accessibility: number;
   bestPractices: number;
   seo: number;
 };
 
-type AuditDetail = {
+export type CreateAuditsList = {
   score: number;
   description: string;
   displayValue?: string;
 };
 
-export type AuditListItem = {
-  id: number;
-  project: string;
-  date: string;
-  time: string;
-  score: number;
-  previousScore: number;
-  status: string;
-  issues: number;
-  duration: string;
-  change: string;
-  type: string;
+export type CreateAuditDetail = {
+  [key: string]: CreateAuditsList;
 };
 
-export type CreateAuditResponse = {
+export type CreatedAudit = {
+  ownerId: string;
+  projectId: string;
+  duration: string;
+  pdfUrl: string;
+  type: string;
+  status: string;
+  criticalCount: number;
+  score: number;
+  categories: CreateAuditCategoryScore;
+  audits: CreateAuditDetail;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
+//////////////////////////////////////////////////
+
+/////////////////// single project audit response type ///////////////
+
+export type SingleProjectAuditResponse = {
   message: string;
-  data: {
-    ownerId: string;
-    projectId: string;
-    duration: string;
-    type: string;
-    status: string;
-    criticalCount: number;
-    score: number;
-    categories: {
-      performance: number;
-      accessibility: number;
-      bestPractices: number;
-      seo: number;
-    };
-    audits: {
-      [key: string]: {
-        score: number;
-        description: string;
-        displayValue?: string;
-      };
-    };
-    createdAt: string;
-    updatedAt: string;
-    id: string;
-  };
-  fake: {
-    ownerId: string;
-    url: string;
-    title: string;
-    active: boolean;
-    score: number;
-    description: string;
-    criticalCount: number;
-    keywords: string[];
-    createdAt: string;
-    updatedAt: string;
-    id: string;
-  }[];
+  data: SingleAuditRecord[];
+  info: PaginationInfo;
+};
+
+export type SingleAuditCategoryScores = {
+  performance: number;
+  accessibility: number;
+  bestPractices: number;
+  seo: number;
+};
+
+export type SingleAuditItem = {
+  score: number;
+  description: string;
+  displayValue?: string;
+};
+
+export type SingleAuditDetails = {
+  [key: string]: SingleAuditItem;
+};
+
+export type SingleAuditRecord = {
+  ownerId: string;
+  projectId: string;
+  duration: string;
+  pdfUrl: string;
+  type: string;
+  status: string;
+  criticalCount: number;
+  score: number;
+  categories: SingleAuditCategoryScores;
+  audits: SingleAuditDetails;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
+export type PaginationInfo = {
+  next: string | null;
+  prev: string | null;
 };

@@ -167,7 +167,9 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Globe size={14} className="mr-2" />
-                        <span>Visit Website</span>
+                        <Link href={project.url} target="_blank">
+                          <span>Visit Website</span>
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>

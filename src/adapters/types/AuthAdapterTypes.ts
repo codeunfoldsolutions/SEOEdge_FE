@@ -29,7 +29,6 @@ export type ResetPasswordPayload = {
 
 export type LoginResponse = {
   user: {
-    // id: string;
     email: string;
     firstName: string;
     lastName: string;

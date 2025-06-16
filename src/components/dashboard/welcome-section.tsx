@@ -14,10 +14,10 @@ export function WelcomeSection({ userName }: { userName: string }) {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="flex items-center gap-1">
+        {/* <Button variant="outline" size="sm" className="flex items-center gap-1">
           <RefreshCw size={14} />
           <span>Run New Audit</span>
-        </Button>
+        </Button> */}
         <Button variant="outline" className="flex items-center gap-1">
           <Calendar size={16} className="mr-1" />
           Last 30 Days

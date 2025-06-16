@@ -58,6 +58,7 @@ class ApiService {
       url,
       [method === "DELETE" ? "data" : "data"]: payload,
       headers,
+      // credentials: "include",
     };
 
     return await apiInstance.request<TResponse>(config);

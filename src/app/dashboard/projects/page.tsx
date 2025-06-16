@@ -6,16 +6,17 @@ import { ProjectsTable } from "@/components/projects/projects-table";
 import { ProjectsSummary } from "@/components/projects/projects-summary";
 import { ProjectFilters } from "@/components/projects/project-filters";
 import { AddProjectModal } from "@/components/modals/add-project-modal";
-import UseGetProjects from "@/adapters/apis/useGetProjects";
+import useGetProjects from "@/adapters/apis/useGetProjects";
 
 export default function ProjectsPage() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-
-  // import { ProjectListItem } from "@/adapters/types/Seo/ProjectAdapterTypes";
-  const { projectsOverview, projects, isProjectsOverviewLoading } =
-    UseGetProjects();
-
+  const {
+    projects,
+    loadingProjects,
+    projectsOverview,
+    loadingProjectsOverview,
+  } = useGetProjects();
   // Filter projects based on status and search query
 
   const filteredProjects = projects.filter((project) => {
@@ -46,7 +47,7 @@ export default function ProjectsPage() {
 
           {/* Summary stats */}
           <ProjectsSummary
-            isLoading={isProjectsOverviewLoading}
+            isLoading={loadingProjects}
             overview={projectsOverview}
           />
 

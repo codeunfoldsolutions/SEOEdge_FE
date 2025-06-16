@@ -1,62 +1,64 @@
 import { SeoAudit } from "../SeoAuditAdapter";
+import { UseQueryOptions } from "@tanstack/react-query";
+import {
+  AllAuditsResponse,
+  AuditOverviewResponse,
+  SingleProjectAuditResponse,
+} from "../types/Seo/AuditAdapterTypes";
 import TanstackWrapper from "../utils/tanstack-wrapper";
 
-const useSeoAuditQuery = TanstackWrapper.query;
-const useSeoAuditMutation = TanstackWrapper.mutation;
+const auditMutation = TanstackWrapper.mutation;
+const auditQuery = TanstackWrapper.query;
 
-const UseGetAudits = () => {
-  // Additional queries for audits overview and all audits
-  const {
-    data: auditOverviewData,
-    isLoading: isAuditsOverviewLoading,
-    isError,
-    isSuccess: isAuditsOverviewSuccess,
-  } = useSeoAuditQuery({
-    queryCallback: SeoAudit.getAuditsOverview,
-    queryKey: ["auditOverview"],
+export const AuditQuery = <T>(path: string, key: string) => {
+  return auditQuery({
+    queryKey: [key],
+    queryCallback: () => SeoAudit.getAuditData<T>(path),
+    enabled: !!path,
   });
+};
 
+export const useCreateAudit = (params: string) => {
+  return auditMutation({
+    mutationCallback: () => SeoAudit.createAudit(params),
+    onSuccess: () => {},
+  });
+};
+
+const useGetAudits = () => {
   const {
     data: auditsData,
-    isLoading: isAuditsLoading,
-    isSuccess: isAuditsSuccess,
-  } = useSeoAuditQuery({
-    queryCallback: SeoAudit.getAllAudits,
-    queryKey: ["allaudits" + new Date().toISOString()],
-  });
+    isLoading: loadingAudits,
+    isSuccess: auditsFetched,
+  } = AuditQuery<AllAuditsResponse>("/all", "allAudits");
 
   const {
-    mutate: createNewAudit,
-    data: createAuditData,
-    isSuccess: isCreateAuditSuccess,
-    isError: isCreateAuditError,
-    isPending: isCreateAuditPending,
-  } = useSeoAuditMutation({
-    mutationCallback({ payload, params }) {
-      return SeoAudit.createAudit(params || "");
-    },
-  });
+    data: auditsOverviewData,
+    isLoading: loadingAuditsOverview,
+    isSuccess: auditsOverviewFetched,
+  } = AuditQuery<AuditOverviewResponse>("/overview", "auditOverview");
 
-  const auditsOverview = isAuditsOverviewSuccess
-    ? auditOverviewData?.data
-    : undefined;
+  const getSingleProjectAudits = (projectId: string) =>
+    AuditQuery<SingleProjectAuditResponse>(
+      `/${projectId}`,
+      "singleProjectAudits"
+    );
 
-  const audits = isAuditsSuccess ? auditsData?.data : [];
+  const audits = auditsFetched ? auditsData?.data : [];
+
+  const auditOverview = auditsOverviewFetched ? auditsOverviewData : undefined;
 
   return {
-    auditsOverview,
-    isAuditsOverviewLoading,
-    isAuditsLoading,
-    isError,
     audits,
+    loadingAudits,
+    auditsFetched,
 
-    // add these to expose mutation to components
-    createNewAudit,
-    createAuditData,
-    isCreateAuditSuccess,
-    isCreateAuditError,
-    isCreateAuditPending,
+    auditOverview,
+    loadingAuditsOverview,
+    auditsOverviewFetched,
+
+    getSingleProjectAudits,
   };
 };
 
-export default UseGetAudits;
+export default useGetAudits;

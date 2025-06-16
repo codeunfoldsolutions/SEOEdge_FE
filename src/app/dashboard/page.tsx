@@ -12,12 +12,20 @@ import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { CriticalIssues } from "@/components/dashboard/critical-issues";
 import { OverviewMetrics } from "@/components/dashboard/overview-metrics";
 import { AuditHistory } from "@/components/dashboard/audit-history";
-import UseGetProjects from "@/adapters/apis/useGetProjects";
+
 import { useAuth } from "@/adapters/utils/auth-context";
+import useGetProjects from "@/adapters/apis/useGetProjects";
+
+//////////////////////
+///////////////////
 
 export default function Dashboard() {
   const [activeProject, setActiveProject] = useState("example.com");
-  const { dashboardProjects } = UseGetProjects();
+  const {
+    dashboardprojects,
+    loadingDashboardProjects,
+    dashboardProjectsFetched,
+  } = useGetProjects();
   const { user } = useAuth();
   // Category metrics
   const categoryMetrics = [
@@ -144,7 +152,7 @@ export default function Dashboard() {
 
           {/* Project Cards */}
           <ProjectsGrid
-            projects={dashboardProjects}
+            projects={dashboardprojects}
             activeProject={activeProject}
           />
 

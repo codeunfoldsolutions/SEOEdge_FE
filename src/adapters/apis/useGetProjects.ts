@@ -1,57 +1,70 @@
-import { SeoProject, useSeoProjectQuery } from "@/adapters/SeoProjectAdapter";
+import { SeoProject } from "../SeoProjectAdapter";
+import {
+  AllProjectsResponse,
+  DashboardProjectResponse,
+  ProjectOverviewResponse,
+} from "../types/Seo/ProjectAdapterTypes";
+import TanstackWrapper from "../utils/tanstack-wrapper";
 
-const UseGetProjects = () => {
-  const {
-    data: projectsOverviewData,
-    isLoading: isProjectsOverviewLoading,
-    isError: isProjectsOverviewError,
-    isSuccess: isProjectsOverviewSuccess,
-  } = useSeoProjectQuery({
-    queryCallback: SeoProject.getProjectOverview,
-    queryKey: ["projectOverview" + new Date().toISOString()],
+export const projectMutation = TanstackWrapper.mutation;
+const projectQuery = TanstackWrapper.query;
+
+export const ProjectQuery = <T>(path: string, key: string) => {
+  return projectQuery({
+    queryKey: [key],
+    queryCallback: () => SeoProject.getProjectData<T>(path),
+    enabled: !!path,
   });
+};
 
+const useGetProjects = () => {
   const {
     data: projectsData,
-    isLoading: isProjectsLoading,
-    isSuccess: isProjectsSuccess,
-    isError: isProjectsError,
-  } = useSeoProjectQuery({
-    queryCallback: SeoProject.getAllProject,
-    queryKey: ["projects" + new Date().toISOString()],
-  });
+    isLoading: loadingProjects,
+    isSuccess: ProjectsFetched,
+  } = ProjectQuery<AllProjectsResponse>("/project/all", "projects");
 
   const {
-    data: dashboardProjectsData,
-    isLoading: isDashboardProjectsLoading,
-    isSuccess: isDashboardProjectsSuccess,
-    isError: isDashboardProjectsError,
-  } = useSeoProjectQuery({
-    queryCallback: SeoProject.getAllProject,
-    queryKey: ["dashboardProjects" + new Date().toISOString()],
-  });
+    data: projectOverviewData,
+    isLoading: loadingProjectsOverview,
+    isSuccess: ProjectsOverviewFetched,
+  } = ProjectQuery<ProjectOverviewResponse>(
+    "/project/overview",
+    "projectOverview"
+  );
 
-  const projectsOverview = isProjectsOverviewSuccess
-    ? projectsOverviewData?.data
+  const {
+    data: dashboardProjectData,
+    isLoading: loadingDashboardProjects,
+    isSuccess: dashboardProjectsFetched,
+  } = ProjectQuery<DashboardProjectResponse>(
+    "/dashboard/project",
+    "dashboardProjects"
+  );
+
+  const projects = ProjectsFetched ? projectsData?.data : [];
+
+  const projectsOverview = ProjectsOverviewFetched
+    ? projectOverviewData.data
     : undefined;
 
-  const projects = isProjectsSuccess ? projectsData?.data : [];
-
-  const dashboardProjects = isDashboardProjectsSuccess
-    ? dashboardProjectsData?.data
+  const dashboardprojects = dashboardProjectsFetched
+    ? dashboardProjectData.data
     : [];
 
   return {
     projects,
+    loadingProjects,
+    ProjectsFetched,
+
     projectsOverview,
-    dashboardProjects,
-    isProjectsOverviewLoading,
-    isProjectsOverviewError,
-    isProjectsLoading,
-    isProjectsError,
-    isDashboardProjectsLoading,
-    isDashboardProjectsError,
+    loadingProjectsOverview,
+    ProjectsOverviewFetched,
+
+    dashboardprojects,
+    loadingDashboardProjects,
+    dashboardProjectsFetched,
   };
 };
 
-export default UseGetProjects;
+export default useGetProjects;

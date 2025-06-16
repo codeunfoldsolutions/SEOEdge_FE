@@ -1,6 +1,5 @@
 "use client";
 
-// import type { Metadata } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -29,58 +28,70 @@ import { Separator } from "@/components/ui/separator";
 import { ProjectAuditList } from "@/components/projects/project-audit-list";
 import { ProjectProgressChart } from "@/components/projects/project-progress-chart";
 import { ProjectScoreChart } from "@/components/projects/project-score-chart";
+import { ProjectQuery } from "@/adapters/apis/useGetProjects";
 
-const projectData = {
-  id: "proj_123456",
-  url: "https://example.com",
-  name: "Example Website",
-  status: "active", // or "paused"
-  createdAt: "2025-01-15T10:30:00Z",
-  lastAuditAt: "2025-04-10T14:45:00Z",
-  totalAudits: 12,
-  averageScore: 76,
-  audits: [
-    {
-      id: "audit_001",
-      date: "2025-04-10T14:45:00Z",
-      score: 78,
-      issues: { critical: 2, moderate: 5, minor: 8 },
-    },
-    {
-      id: "audit_002",
-      date: "2025-03-15T09:20:00Z",
-      score: 75,
-      issues: { critical: 3, moderate: 6, minor: 7 },
-    },
-    {
-      id: "audit_003",
-      date: "2025-02-20T11:10:00Z",
-      score: 72,
-      issues: { critical: 4, moderate: 7, minor: 9 },
-    },
-    {
-      id: "audit_004",
-      date: "2025-01-25T16:30:00Z",
-      score: 68,
-      issues: { critical: 5, moderate: 8, minor: 10 },
-    },
-  ],
-  scoreHistory: [
-    { date: "Jan 2025", score: 68 },
-    { date: "Feb 2025", score: 72 },
-    { date: "Mar 2025", score: 75 },
-    { date: "Apr 2025", score: 78 },
-  ],
-};
+import useGetAudits from "@/adapters/apis/useGetAudits";
+import { SingleProjectResponse } from "@/adapters/types/Seo/ProjectAdapterTypes";
+import LoadingFallback from "@/components/ui/loading-fallback";
 
-// export const metadata: Metadata = {
-//   title: "Project Details | SEO Audit Tool",
-//   description: "View detailed information about your SEO project",
-// };
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////
+
+const scoreHistory = [
+  { date: "2023-01-01", score: 75 },
+  { date: "2023-02-01", score: 80 },
+  { date: "2023-03-01", score: 78 },
+  { date: "2023-04-01", score: 82 },
+  { date: "2023-05-01", score: 85 },
+  { date: "2023-06-01", score: 88 },
+  { date: "2023-07-01", score: 90 },
+];
+
+/////////////////////////////////////////////
+///////////////////////////////////////////
 
 const ProjectPage = () => {
   const { id } = useParams() as { id: string };
   const isActive = true;
+  const { getSingleProjectAudits } = useGetAudits();
+
+  const {
+    data: auditData,
+    isLoading: auditsLoading,
+    isSuccess: auditsFetched,
+  } = getSingleProjectAudits(id);
+
+  const { data, isLoading: projectDataLoading } =
+    ProjectQuery<SingleProjectResponse>(
+      `/project/${id}`,
+      `singleproject-${id}`
+    );
+
+  const audit =
+    auditsFetched && auditData && Array.isArray(auditData.data)
+      ? auditData.data
+      : [];
+  const latestAudit = audit && audit.length > 0 ? audit[0] : null;
+
+  const projectData = data?.data[0];
+
+  if (projectDataLoading || auditsLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingFallback size="lg" variant="bars" />;
+      </div>
+    );
+  }
+
+  if (!projectData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg text-muted-foreground">
+          Project not found or data is unavailable.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <main className="flex-1 overflow-auto p-6">
@@ -88,7 +99,9 @@ const ProjectPage = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold tracking-tight">{id}</h1>
+              <h1 className="text-3xl font-bold tracking-tight">
+                {projectData.url.replace("https://", "")}
+              </h1>
               {isActive ? (
                 <Badge className="bg-success">Active</Badge>
               ) : (
@@ -101,9 +114,9 @@ const ProjectPage = () => {
               )}
             </div>
             <div className="flex items-center gap-1 text-muted-foreground mt-1">
-              <span>{`https://${id}.com`}</span>
+              <span>{`${projectData.url}.com`}</span>
               <a
-                href={`https://${projectData.url}`}
+                href={projectData.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex"
@@ -138,10 +151,10 @@ const ProjectPage = () => {
             <CardContent>
               <div className="flex flex-col items-center justify-center py-4">
                 <div className="relative w-32 h-32">
-                  <ProjectScoreChart score={projectData.averageScore} />
+                  <ProjectScoreChart score={projectData.score} />
                   <div className="absolute inset-0 flex items-center justify-center flex-col">
                     <span className="text-4xl font-bold">
-                      {projectData.averageScore}
+                      {projectData.score * 100}
                     </span>
                     <span className="text-sm text-muted-foreground">
                       out of 100
@@ -149,9 +162,9 @@ const ProjectPage = () => {
                   </div>
                 </div>
                 <div className="mt-4 text-center">
-                  {projectData.averageScore >= 80 ? (
+                  {projectData.score >= 80 ? (
                     <Badge className="bg-success">Good</Badge>
-                  ) : projectData.averageScore >= 60 ? (
+                  ) : projectData.score >= 60 ? (
                     <Badge className="bg-warning">Needs Improvement</Badge>
                   ) : (
                     <Badge variant="destructive">Critical</Badge>
@@ -174,7 +187,14 @@ const ProjectPage = () => {
                     <span className="text-sm">Created</span>
                   </div>
                   <span className="text-sm font-medium">
-                    {new Date(projectData.createdAt).toLocaleDateString()}
+                    {new Date(projectData.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -183,7 +203,14 @@ const ProjectPage = () => {
                     <span className="text-sm">Last Audit</span>
                   </div>
                   <span className="text-sm font-medium">
-                    {new Date(projectData.lastAuditAt).toLocaleDateString()}
+                    {new Date(projectData.updatedAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -192,7 +219,7 @@ const ProjectPage = () => {
                     <span className="text-sm">Total Audits</span>
                   </div>
                   <span className="text-sm font-medium">
-                    {projectData.totalAudits}
+                    {projectData.auditsCount}
                   </span>
                 </div>
               </div>
@@ -207,28 +234,46 @@ const ProjectPage = () => {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
+                  <span className="text-sm">Score</span>
+                  <Badge className="bg-warning">
+                    {latestAudit ? latestAudit.score * 100 : "N/A"}
+                  </Badge>
+                </div>
+                <div className="flex justify-between items-center">
                   <span className="text-sm">Critical Issues</span>
                   <Badge variant="destructive">
-                    {projectData.audits[0].issues.critical}
+                    {latestAudit &&
+                    typeof latestAudit.criticalCount === "number"
+                      ? latestAudit.criticalCount
+                      : "N/A"}
                   </Badge>
                 </div>
+
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Moderate Issues</span>
-                  <Badge className="bg-warning0">
-                    {projectData.audits[0].issues.moderate}
-                  </Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Minor Issues</span>
+                  <span className="text-sm">Performance</span>
                   <Badge className="bg-success">
-                    {projectData.audits[0].issues.minor}
+                    {latestAudit &&
+                    latestAudit.categories &&
+                    typeof latestAudit.categories.performance === "number"
+                      ? latestAudit.categories.performance * 100
+                      : "N/A"}
                   </Badge>
                 </div>
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" size="sm" className="w-full" asChild>
-                <Link href={`/projects/${id}${projectData.audits[0].id}`}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                asChild
+                disabled={!latestAudit}
+              >
+                <Link
+                  href={latestAudit ? `/projects/${id}${latestAudit.id}` : "#"}
+                  tabIndex={!latestAudit ? -1 : undefined}
+                  aria-disabled={!latestAudit}
+                >
                   View Latest Audit <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -247,8 +292,9 @@ const ProjectPage = () => {
               <Button>Export History</Button>
             </div>
             <Separator />
-            <ProjectAuditList projectId={id} audits={projectData.audits} />
+            <ProjectAuditList projectId={id} audits={audit} />
           </TabsContent>
+
           <TabsContent value="progress" className="space-y-4 pt-4">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Score Progress</h2>
@@ -263,7 +309,7 @@ const ProjectPage = () => {
             </div>
             <Separator />
             <div className="h-[400px] w-full">
-              <ProjectProgressChart data={projectData.scoreHistory} />
+              <ProjectProgressChart data={scoreHistory} />
             </div>
           </TabsContent>
         </Tabs>

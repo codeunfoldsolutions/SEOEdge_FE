@@ -2,10 +2,14 @@
 
 import { Globe, AlertCircle, CheckCircle, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ProjectOverviewData } from "@/adapters/types/Seo/ProjectAdapterTypes";
 
 interface ProjectOverviewProps {
-  overview?: ProjectOverviewData;
+  overview?: {
+    totalProjects: number;
+    activeProjects: number;
+    totalIssues: number;
+    averageScore: number;
+  };
   isLoading: boolean;
 }
 
@@ -55,7 +59,11 @@ export function ProjectsSummary({ overview, isLoading }: ProjectOverviewProps) {
           </div>
           <div>
             <p className="text-sm text-gray">Average Score</p>
-            <p className="text-2xl font-bold">{overview?.averageScore}</p>
+
+            <p className="text-2xl font-bold">
+              {" "}
+              {overview?.averageScore.toFixed(1)}
+            </p>
           </div>
         </CardContent>
       </Card>

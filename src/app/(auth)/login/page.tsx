@@ -149,7 +149,7 @@ export default function SignIn() {
                         type="email"
                         placeholder="Enter your email"
                         {...field}
-                        className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                        className="w-full p-3 border rounded-md focus:outline-none transition-all"
                       />
                     </FormControl>
                     <FormMessage className="text-xs text-red-500 mt-1" />
@@ -179,7 +179,7 @@ export default function SignIn() {
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
                           {...field}
-                          className="w-full p-3 pl-4 border border-[#e4e4e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4]/20 focus:border-[#4285f4] transition-all"
+                          className="w-full p-3 border rounded-md focus:outline-none transition-all"
                         />
                         <button
                           type="button"
@@ -223,7 +223,7 @@ export default function SignIn() {
                 <Button
                   type="submit"
                   disabled={loginMutation.isPending || !form.formState.isValid}
-                  className="w-full bg-[#1e1e1e] text-white py-3 rounded-lg hover:bg-black transition-colors font-medium shadow-sm hover:shadow"
+                  className="w-full bg-primary text-white py-3 rounded-lg transition-colors font-medium shadow-sm hover:shadow"
                 >
                   {loginMutation.isPending ? (
                     <>

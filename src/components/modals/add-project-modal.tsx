@@ -27,15 +27,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import {
-  SeoProject,
-  useSeoProjectMutation,
-} from "@/adapters/SeoProjectAdapter";
+import { SeoProject } from "@/adapters/SeoProjectAdapter";
 
 import { ProjectCreate } from "@/adapters/types/Seo/ProjectAdapterTypes";
 import { addProjectSchema } from "@/lib/validations/addProject";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { projectMutation } from "@/adapters/apis/useGetProjects";
 
 export function AddProjectModal() {
   const [open, setOpen] = useState(false);
@@ -45,8 +43,9 @@ export function AddProjectModal() {
     resolver: zodResolver(addProjectSchema),
   });
 
-  const createProjectMutation = useSeoProjectMutation({
+  const createProjectMutation = projectMutation({
     mutationCallback: SeoProject.createProject,
+
     onSuccess: () => {
       form.reset();
       setOpen(false);

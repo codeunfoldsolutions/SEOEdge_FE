@@ -13,21 +13,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-type Audit = {
-  id: string;
-  date: string;
-  score: number;
-  issues: {
-    critical: number;
-    moderate: number;
-    minor: number;
-  };
-};
+import { SingleAuditRecord } from "@/adapters/types/Seo/AuditAdapterTypes";
 
 interface ProjectAuditListProps {
   projectId: string;
-  audits: Audit[];
+  audits: SingleAuditRecord[];
 }
 
 export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
@@ -46,8 +36,8 @@ export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
   const sortedAudits = [...audits].sort((a, b) => {
     if (sortField === "date") {
       return sortDirection === "asc"
-        ? new Date(a.date).getTime() - new Date(b.date).getTime()
-        : new Date(b.date).getTime() - new Date(a.date).getTime();
+        ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else {
       return sortDirection === "asc" ? a.score - b.score : b.score - a.score;
     }
@@ -102,8 +92,8 @@ export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
           {sortedAudits.map((audit) => (
             <TableRow key={audit.id}>
               <TableCell className="font-medium">
-                {new Date(audit.date).toLocaleDateString()} at{" "}
-                {new Date(audit.date).toLocaleTimeString([], {
+                {new Date(audit.createdAt).toLocaleDateString()} at{" "}
+                {new Date(audit.createdAt).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -123,20 +113,14 @@ export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Badge variant="destructive" className="text-xs">
-                    {audit.issues.critical} Critical
-                  </Badge>
-                  <Badge className="bg-warning">
-                    {audit.issues.moderate} Moderate
-                  </Badge>
-                  <Badge className="bg-success text-xs">
-                    {audit.issues.minor} Minor
+                    {audit.criticalCount} Critical
                   </Badge>
                 </div>
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button size="sm" variant="outline" asChild>
-                    <Link href={`/projects/${projectId}/audits/${audit.id}`}>
+                    <Link href={`/projects/${projectId}/${audit.id}`}>
                       View Details
                     </Link>
                   </Button>

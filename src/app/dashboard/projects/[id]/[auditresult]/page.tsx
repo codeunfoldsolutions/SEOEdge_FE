@@ -39,33 +39,15 @@ import { CriticalIssues } from "@/components/audit/critical-issues";
 import { ScoreOverview } from "@/components/audit/score-overview";
 import { GuestCTA } from "@/components/audit/guest-cta";
 import { Recommendations } from "@/components/audit/recommendations";
-import { SeoAudit, useSeoAuditQuery } from "@/adapters/SeoAuditAdapter";
 import { SelectGroup } from "@radix-ui/react-select";
 import { sl } from "date-fns/locale";
-import UseGetAudits from "@/adapters/apis/useGetAudits";
 
 export default function Project() {
   const [showSidebar, setshowSidebar] = useState(true);
+
   const { auditresult } = useParams() as { auditresult: string };
 
-  const {
-    createNewAudit,
-    isCreateAuditPending,
-    isCreateAuditSuccess,
-    isCreateAuditError,
-    createAuditData,
-  } = UseGetAudits();
-
-  const handleCreateAudit = (auditresult: string) => {
-    createNewAudit({ payload: null, params: auditresult });
-  };
-  useEffect(() => {
-    if (isCreateAuditSuccess) {
-      console.log("New audit created:", createAuditData);
-    }
-
-    console.log("error creating audit");
-  }, [isCreateAuditSuccess, createAuditData, isCreateAuditError]);
+  const handleCreateAudit = (auditresult: string) => {};
 
   ////////// // Mock data for the audit details
   const auditDetails = {
@@ -259,22 +241,8 @@ export default function Project() {
       updatedAt: "2025-06-05T05:54:38.465Z",
       id: "6841311ea75529e5fd7bb08d",
     },
-    fake: [
-      {
-        ownerId: "681e4cc2e6c62f089c634fdc",
-        url: "https://www.google.com",
-        title: "Google",
-        active: true,
-        score: 0.76,
-        description: "Some dummy description",
-        criticalCount: 71,
-        keywords: [],
-        createdAt: "2025-05-14T16:34:05.644Z",
-        updatedAt: "2025-06-05T05:54:38.627Z",
-        id: "6824c5fdf09379ba8608fad3",
-      },
-    ],
   };
+
   return (
     <main className="flex-1 overflow-auto p-6">
       <div className="max-w-7xl mx-auto">
@@ -343,7 +311,7 @@ export default function Project() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
+            {/* 
             <Button
               onClick={() => handleCreateAudit(auditresult)}
               disabled={isCreateAuditPending}
@@ -360,6 +328,11 @@ export default function Project() {
                   <span>Run New Audit</span>
                 </>
               )}
+            </Button> */}
+
+            <Button className="gap-1">
+              <RefreshCw size={16} />
+              <span>Run New Audit</span>
             </Button>
           </div>
         </div>

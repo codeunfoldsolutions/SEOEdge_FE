@@ -1,27 +1,12 @@
 import ApiService from "./utils/api-service";
-import TanstackWrapper from "./utils/tanstack-wrapper";
-import { MutationCallBackArgs } from "./types/TanstackUtilTypes";
 
-import {
-  AllAuditsResponse,
-  AuditOverviewData,
-  CreateAuditResponse,
-} from "./types/Seo/AuditAdapterTypes";
+import { CreateAuditResponse } from "./types/Seo/AuditAdapterTypes";
 
 const auditService = new ApiService("/seo/audits");
-const useSeoAuditMutation = TanstackWrapper.mutation;
-const useSeoAuditQuery = TanstackWrapper.query;
 
 const SeoAudit = {
-  getAuditsOverview: async () => {
-    const response = await auditService.fetch<{ data: AuditOverviewData }>(
-      "/overview"
-    );
-    return response;
-  },
-
-  getAllAudits: async () => {
-    const response = await auditService.fetch<AllAuditsResponse>(`/all`);
+  getAuditData: async <T>(path: string): Promise<T> => {
+    const response = await auditService.fetch<T>(path || ``);
     return response;
   },
 
@@ -36,4 +21,4 @@ const SeoAudit = {
   },
 };
 
-export { SeoAudit, useSeoAuditMutation, useSeoAuditQuery };
+export { SeoAudit };
