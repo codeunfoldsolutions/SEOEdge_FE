@@ -27,6 +27,18 @@ export const useCreateAudit = (params: string) => {
 
 const useGetAudits = () => {
   const {
+    mutate: createNewAudit,
+    data: createAuditData,
+    isSuccess: isCreateAuditSuccess,
+    isError: isCreateAuditError,
+    isPending: isCreateAuditPending,
+  } = auditMutation({
+    mutationCallback({ payload, params }) {
+      return SeoAudit.createAudit(params || "");
+    },
+  });
+
+  const {
     data: auditsData,
     isLoading: loadingAudits,
     isSuccess: auditsFetched,
@@ -56,6 +68,13 @@ const useGetAudits = () => {
     auditOverview,
     loadingAuditsOverview,
     auditsOverviewFetched,
+
+    // add these to expose mutation to components
+    createNewAudit,
+    createAuditData,
+    isCreateAuditSuccess,
+    isCreateAuditError,
+    isCreateAuditPending,
 
     getSingleProjectAudits,
   };

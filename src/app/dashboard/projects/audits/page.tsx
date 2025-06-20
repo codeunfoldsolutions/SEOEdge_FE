@@ -41,13 +41,41 @@ import { GuestCTA } from "@/components/audit/guest-cta";
 import { Recommendations } from "@/components/audit/recommendations";
 import { SelectGroup } from "@radix-ui/react-select";
 import { sl } from "date-fns/locale";
+import useGetAudits from "@/adapters/apis/useGetAudits";
+import LoadingFallback from "@/components/ui/loading-fallback";
 
 export default function Project() {
   const [showSidebar, setshowSidebar] = useState(true);
 
   const { auditresult } = useParams() as { auditresult: string };
 
-  const handleCreateAudit = (auditresult: string) => {};
+  const {
+    createNewAudit,
+    isCreateAuditPending,
+    isCreateAuditSuccess,
+    isCreateAuditError,
+    createAuditData,
+  } = useGetAudits();
+
+  const handleCreateAudit = () => {
+    createNewAudit({ payload: null, params: auditresult });
+  };
+
+  //////////////////////////////// get all audits for the project
+  const { getSingleProjectAudits } = useGetAudits();
+
+  const {
+    data: auditData,
+    isLoading: auditsLoading,
+    isSuccess: auditsFetched,
+    isError: auditsError,
+  } = getSingleProjectAudits(auditresult);
+
+  const data = auditsFetched ? auditData : undefined;
+
+  const response = data?.data.find((item) => item.id === auditresult);
+
+  console.log(response);
 
   ////////// // Mock data for the audit details
   const auditDetails = {
@@ -170,78 +198,20 @@ export default function Project() {
     },
   ];
 
-  const apiResponse = {
-    message: "New Audit created successfully",
-    data: {
-      ownerId: "681e4cc2e6c62f089c634fdc",
-      projectId: "6824c5fdf09379ba8608fad3",
-      duration: "8433",
-      type: "manual",
-      status: "completed",
-      criticalCount: 71,
-      score: 0.76,
-      categories: {
-        performance: 0.97,
-        accessibility: 0.93,
-        bestPractices: 1,
-        seo: 0.83,
-      },
-      audits: {
-        "is-on-https": {
-          score: 1,
-          description:
-            "All sites should be protected with HTTPS, even ones that don't handle sensitive data.",
-        },
-        "redirects-http": {
-          score: 0,
-          description:
-            "Make sure that you redirect all HTTP traffic to HTTPS in order to enable secure web features for all your users.",
-        },
-        viewport: {
-          score: 1,
-          description:
-            'A `<meta name="viewport">` not only optimizes your app for mobile screen sizes, but also prevents [a 300 millisecond delay to user input](https://developer.',
-        },
-        "first-contentful-paint": {
-          score: 0.84,
-          description:
-            "First Contentful Paint marks the time at which the first text or image is painted.",
-          displayValue: "2.0s",
-        },
-        "first-meaningful-paint": {
-          score: 0,
-          description:
-            "First Meaningful Paint measures when the primary content of a page is visible.",
-        },
-        speedIndex: {
-          score: 0.99,
-          description:
-            "Speed Index shows how quickly the contents of a page are visibly populated.",
-          displayValue: "2.0s",
-        },
-        "errors-in-console": {
-          score: 1,
-          description:
-            "Errors logged to the console indicate unresolved problems.",
-        },
-        interactive: {
-          score: 0.97,
-          description:
-            "Time to Interactive is the amount of time it takes for the page to become fully interactive.",
-          displayValue: "2.7s",
-        },
-        "bootup-time": {
-          score: 1,
-          description:
-            "Consider reducing the time spent parsing, compiling, and executing JS.",
-          displayValue: "0.3s",
-        },
-      },
-      createdAt: "2025-06-05T05:54:38.465Z",
-      updatedAt: "2025-06-05T05:54:38.465Z",
-      id: "6841311ea75529e5fd7bb08d",
-    },
-  };
+  if (auditsLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingFallback size="lg" variant="bars" />;
+      </div>
+    );
+  }
+  if (auditsError || response === undefined) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg text-muted-foreground">Some thing went wrong</p>
+      </div>
+    );
+  }
 
   return (
     <main className="flex-1 overflow-auto p-6">
@@ -257,12 +227,12 @@ export default function Project() {
 
             <div className="flex  items-center gap-2 mt-2">
               <Badge className="ml-2">
-                {new Date(apiResponse.data.createdAt).toLocaleDateString()}
+                {new Date(response.createdAt).toLocaleDateString()}
               </Badge>
               <div className="flex items-center gap-4 text-sm text-gray">
                 <div className="flex items-center gap-1">
                   <Clock size={14} />
-                  <span>Duration: {apiResponse.data.duration}</span>
+                  <span>Duration: {response.duration}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <FileText size={14} />
@@ -273,19 +243,6 @@ export default function Project() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <BookmarkPlus size={18} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Save Audit</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider> */}
-
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -299,7 +256,7 @@ export default function Project() {
               </Tooltip>
             </TooltipProvider>
 
-            <TooltipProvider>
+            {/* <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="outline" size="icon">
@@ -310,10 +267,10 @@ export default function Project() {
                   <p>Share Results</p>
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
-            {/* 
+            </TooltipProvider> */}
+
             <Button
-              onClick={() => handleCreateAudit(auditresult)}
+              onClick={() => handleCreateAudit()}
               disabled={isCreateAuditPending}
               className="gap-1"
             >
@@ -328,17 +285,17 @@ export default function Project() {
                   <span>Run New Audit</span>
                 </>
               )}
-            </Button> */}
+            </Button>
 
-            <Button className="gap-1">
+            {/* <Button className="gap-1">
               <RefreshCw size={16} />
               <span>Run New Audit</span>
-            </Button>
+            </Button> */}
           </div>
         </div>
 
         {/* Overall Score */}
-        <ScoreOverview data={apiResponse.data} />
+        <ScoreOverview data={response} />
 
         {/* Critical Issues */}
         <CriticalIssues issues={criticalIssues} showDetailedView={false} />

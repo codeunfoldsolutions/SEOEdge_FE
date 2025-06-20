@@ -114,7 +114,7 @@ const ProjectPage = () => {
               )}
             </div>
             <div className="flex items-center gap-1 text-muted-foreground mt-1">
-              <span>{`${projectData.url}.com`}</span>
+              <span>{`${projectData.url}`}</span>
               <a
                 href={projectData.url}
                 target="_blank"
@@ -151,7 +151,7 @@ const ProjectPage = () => {
             <CardContent>
               <div className="flex flex-col items-center justify-center py-4">
                 <div className="relative w-32 h-32">
-                  <ProjectScoreChart score={projectData.score} />
+                  <ProjectScoreChart score={projectData.score * 100} />
                   <div className="absolute inset-0 flex items-center justify-center flex-col">
                     <span className="text-4xl font-bold">
                       {projectData.score * 100}
@@ -287,12 +287,10 @@ const ProjectPage = () => {
             <TabsTrigger value="progress">Progress Over Time</TabsTrigger>
           </TabsList>
           <TabsContent value="audits" className="space-y-4 pt-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Audit History</h2>
-              <Button>Export History</Button>
-            </div>
+            <h2 className="text-xl font-semibold">Audit History</h2>
+
             <Separator />
-            <ProjectAuditList projectId={id} audits={audit} />
+            <ProjectAuditList Id={id} audits={audit} />
           </TabsContent>
 
           <TabsContent value="progress" className="space-y-4 pt-4">

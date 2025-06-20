@@ -7,19 +7,8 @@ import { Button } from "@/components/ui/button";
 
 interface ScoreOverviewProps {
   data: {
-    ownerId: string;
-    projectId: string;
-    duration: string;
-    type: string;
-    status: string;
-    criticalCount: number;
     score: number;
-    categories: {
-      performance: number;
-      accessibility: number;
-      bestPractices: number;
-      seo: number;
-    };
+
     audits: {
       [key: string]: {
         score: number;
@@ -140,17 +129,17 @@ export function ScoreOverview({
 
           <div className="text-center">
             <p className="text-sm font-medium mb-1">
-              {data.score * 100 >= 80
+              {scorePercent >= 80
                 ? "Excellent"
-                : data.score * 100 >= 60
+                : scorePercent >= 60
                 ? "Good"
                 : "Needs Improvement"}
             </p>
             <p className="text-sm text-gray">
               Your website is performing{" "}
-              {data.score * 100 >= 80
+              {scorePercent >= 80
                 ? "very well"
-                : data.score * 100 >= 60
+                : scorePercent >= 60
                 ? "adequately"
                 : "below average"}{" "}
               compared to similar websites.

@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import Link from "next/link";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface SidebarProps {
@@ -169,45 +170,6 @@ export function ProjectViewSidebar({
               ))}
             </div>
           </div>
-
-          {/* <Separator className="my-4" /> */}
-
-          {/* <div>
-            <h3 className="text-sm font-medium mb-2">Critical Issues</h3>
-            <div className="space-y-2">
-              {criticalIssues.map((issue, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between text-xs"
-                >
-                  <div className="flex items-center gap-1">
-                    <issue.icon
-                      size={12}
-                      className={
-                        issue.impact === "High"
-                          ? "text-danger"
-                          : issue.impact === "Medium"
-                          ? "text-warning"
-                          : "text-success"
-                      }
-                    />
-                    <span>{issue.name}</span>
-                  </div>
-                  <Badge
-                    className={
-                      issue.impact === "High"
-                        ? "bg-danger/20 text-danger border-danger/20"
-                        : issue.impact === "Medium"
-                        ? "bg-warning/20 text-warning border-warning/20"
-                        : "bg-success/20 text-success border-success/20"
-                    }
-                  >
-                    {issue.count}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </div> */}
         </div>
       </div>
 

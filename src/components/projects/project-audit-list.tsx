@@ -16,11 +16,11 @@ import {
 import { SingleAuditRecord } from "@/adapters/types/Seo/AuditAdapterTypes";
 
 interface ProjectAuditListProps {
-  projectId: string;
+  Id: string;
   audits: SingleAuditRecord[];
 }
 
-export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
+export function ProjectAuditList({ Id, audits }: ProjectAuditListProps) {
   const [sortField, setSortField] = useState<"date" | "score">("date");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
@@ -100,10 +100,10 @@ export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{audit.score}</span>
-                  {audit.score >= 80 ? (
+                  <span className="font-semibold">{audit.score * 100}</span>
+                  {audit.score * 100 >= 80 ? (
                     <Badge className="bg-success">Good</Badge>
-                  ) : audit.score >= 60 ? (
+                  ) : audit.score * 100 >= 60 ? (
                     <Badge className="bg-warning">Needs Improvement</Badge>
                   ) : (
                     <Badge variant="destructive">Critical</Badge>
@@ -120,7 +120,7 @@ export function ProjectAuditList({ projectId, audits }: ProjectAuditListProps) {
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button size="sm" variant="outline" asChild>
-                    <Link href={`/projects/${projectId}/${audit.id}`}>
+                    <Link href={`/dashboard/audits/${audit.id}`}>
                       View Details
                     </Link>
                   </Button>
